@@ -1,0 +1,3490 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajat Singh | Graphic Designer</title>
+    <meta name="description" content="Portfolio of Rajat Singh, a creative Graphic Designer specializing in brand identity, visual communication, and digital design.">
+    <meta name="keywords" content="Graphic Designer, Portfolio, Branding, Web Design, 3D Art, Rajat Singh">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://rajatsingh.design/">
+    <meta property="og:title" content="Rajat Singh | Graphic Designer">
+    <meta property="og:description" content="Creative and detail-oriented Graphic Designer with 3+ years of experience.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Rajat Singh | Graphic Designer">
+    <meta property="twitter:description" content="Creative and detail-oriented Graphic Designer with 3+ years of experience.">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop">
+    
+    <!-- Optimized Libraries - Added DEFER for non-blocking render -->
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts (Manrope for UI, Oswald for Display, Rubik for Work Sample) -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Oswald:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Core Interaction Libraries - Defer loading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+
+    <style>
+        :root {
+            /* RESTORED ORIGINAL COLOR THEME */
+            --onyx: #131515;
+            --graphite: #2b2c28;
+            --verdigris: #339989;
+            --pearl-aqua: #7de2d1;
+            --snow: #fffafb;
+
+            /* Functional Mappings */
+            --bg-dark: var(--onyx);
+            --bg-card: #1a1c1c; 
+            --text-light: var(--snow);
+            --text-dim: var(--pearl-aqua);
+            
+            --accent: var(--verdigris);
+            --accent-glow: var(--pearl-aqua);
+            
+            --header-height: 40px; 
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Manrope', sans-serif;
+            overflow: hidden; /* Lenis handles scrolling */
+            cursor: none;
+        }
+
+        /* Typography */
+        .font-display { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+        /* Animation Optimization */
+        .skill-group {
+            will-change: transform, opacity, box-shadow, border-color;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 20px; height: 20px;
+            border: 1px solid var(--accent-glow); 
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s, transform 0.1s;
+            mix-blend-mode: difference;
+        }
+        #cursor.hovered {
+            width: 50px; height: 50px;
+            background-color: var(--snow);
+            border-color: transparent;
+            mix-blend-mode: difference;
+        }
+        /* Grabbing state for custom cursor */
+        #cursor.grabbing {
+            width: 40px; height: 40px;
+            background-color: var(--accent);
+            border-color: transparent;
+            transform: translate(-50%, -50%) scale(0.8);
+            mix-blend-mode: normal;
+        }
+
+        /* HIDE CURSOR ON TOUCH DEVICES */
+        @media (hover: none) and (pointer: coarse) {
+            #cursor { display: none !important; }
+            /* Restore default cursor interactions */
+            body, a, button, .slider-btn, .stack-img { cursor: auto !important; }
+        }
+
+        /* NEW: Feather Container (Layer 2 - Above Content) */
+        #feather-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            z-index: 60; /* Above Navbar (50) and Content */
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-dark);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loader-bar {
+            width: 200px;
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .loader-progress {
+            position: absolute;
+            left: 0; top: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--text-light);
+        }
+
+        /* LIGHTHOUSE CSS START */
+        .lh-container {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .lh-top {
+            position: relative;
+            height: 85%;
+            width: 100%;
+        }
+
+        .stars {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 90%;
+            z-index: -1;
+        }
+        .stars > * {
+            position: absolute;
+            background: #f1f1f1;
+            border-radius: 50px;
+            animation: twinkle 2s infinite;
+            transition-timing-function: ease-in-out;
+        }
+        /* Sample stars placement (reduced for brevity/performance in single file) */
+        .stars .star:nth-of-type(1) { top: 31%; left: 81%; width: 1px; height: 1px; animation-delay: 5s; }
+        .stars .star:nth-of-type(2) { top: 93%; left: 94%; width: 2px; height: 2px; animation-delay: 5s; }
+        .stars .star:nth-of-type(3) { top: 58%; left: 41%; width: 5px; height: 5px; animation-delay: 4s; }
+        .stars .star:nth-of-type(4) { top: 6%; left: 61%; width: 3px; height: 3px; animation-delay: 1s; }
+        .stars .star:nth-of-type(5) { top: 2%; left: 33%; width: 6px; height: 6px; animation-delay: 4s; }
+        .stars .star:nth-of-type(10) { top: 73%; left: 82%; width: 2px; height: 2px; animation-delay: 4s; }
+
+        @keyframes twinkle {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .sky {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background-color: #c5cfb7;
+            background: radial-gradient(ellipse at center, #c5cfb7 0%, #84ad98 20%, #5f9986 39%, #5f9986 50%, #5f9986 60%, #4a8974 72%, #326565 84%, #082d47 100%);
+            z-index: -2;
+        }
+
+        /* --- Remainder of Lighthouse CSS (Kept for appearance) --- */
+        .right-attachment { position: absolute; height: 100px; width: 150px; background: #141912; left: 20px; top: -20px; }
+        .right-roof { position: absolute; height: 20px; width: 140px; background: #141912; left: 11px; top: -20px; transform: skew(50deg); }
+        .satellite { position: absolute; height: 60px; width: 2px; background: #141912; left: 90px; top: -40px; }
+        .back-rocks { position: absolute; width: 480px; height: 50px; left: -130px; bottom: -47px; }
+        .back-rock-1, .back-rock-2, .back-rock-3 { position: absolute; bottom: -30px; border-radius: 100%; background: #252b21; }
+        .back-rock-1 { width: 68px; height: 60px; left: 0px; }
+        .back-rock-2 { width: 70px; height: 70px; left: 68%; }
+        .back-rock-3 { width: 55px; height: 55px; left: 88%; }
+        .front-rocks { position: absolute; bottom: -90px; left: -145px; height: 100px; width: 350px; }
+        .front-rock-1, .front-rock-2, .front-rock-3 { position: absolute; background: #141912; border-radius: 100%; }
+        .front-rock-1 { left: 50px; height: 150px; width: 180px; }
+        .front-rock-2 { bottom: 0px; left: 240px; height: 100px; width: 150px; }
+        .front-rock-3 { bottom: -22px; left: 365px; height: 100px; width: 90px; }
+        .overlay { position: absolute; height: 40px; width: 42px; background: #141b11; top: 54px; left: -19px; }
+        .panel-container { width: 100%; height: 307px; margin: 0; position: absolute; transform: perspective(300px); left: 0px; bottom: -12px; }
+        .left-mid-roof { position: absolute; height: 35px; width: 100px; background: #141912; bottom: 0%; left: -16px; }
+        .left-mid-roof-2 { position: absolute; height: 5px; width: 70px; background: #141912; bottom: 18%; left: -11px; border-radius: 10%; }
+        #rotate-x .panel { background-size: 100%; background: #141912; width: 50px; height: 100%; min-height: 220px; margin: auto; transform: perspective(329px) rotateX(44deg) translate3d(0px, 0px, 0px); }
+        .top-triangle { padding-top: 7px; position: relative; height: 0px; width: 3px; bottom: 262px; left: 3px; background: rgba(0, 128, 0, 0); border-left: 20px rgba(0, 128, 0, 0) solid; border-right: 23px rgba(0, 128, 0, 0) solid; border-bottom: 18px #141b11 solid; border-top: 3px rgba(0, 128, 0, 0) solid; border-bottom-right-radius: 28%; border-bottom-left-radius: 28%; opacity: 0.98; }
+        .top-triangle-circle-middle { position: absolute; height: 2px; width: 9.5px; background: #141912; bottom: 0px; left: -3px; }
+        .top-triangle-circle { position: relative; height: 8px; width: 8px; bottom: 17px; left: -2.5px; background: #141912; border-radius: 100%; }
+        .top-triangle-circle-top { position: relative; height: 8px; width: 6px; bottom: 3px; left: -1.5px; background: #141912; }
+        .light-house { position: absolute; bottom: 25px; left: 55vw; transform: scale(0.8); transform-origin: bottom center; }
+        .mid-railings-rail { position: absolute; height: 10px; width: 55px; top: 72px; left: -26px; border-top-left-radius: 2px; border-top-right-radius: 2px; border: 1px solid #141912; }
+        .mid-rail { position: absolute; width: 1px; height: 10px; background: #141912; }
+        .mid-rail-1 { left: 2px; }
+        .mid-rail-2 { left: 4px; }
+        .mid-rail-3 { left: 6px; }
+        .mid-rail-5 { left: 49px; }
+        .mid-rail-6 { left: 52px; }
+        .left-mid-railings { position: absolute; top: 80px; left: -28px; border-left: 26px rgba(0, 128, 0, 0) solid; border-right: 15px rgba(0, 128, 0, 0) solid; border-bottom: 15px #141b11 solid; border-top: 0px rgba(0, 128, 0, 0) solid; border-bottom-left-radius: 100%; }
+        .right-mid-railings { position: absolute; top: 80px; left: -8px; border-left: 26px rgba(0, 128, 0, 0) solid; border-right: 15px rgba(0, 128, 0, 0) solid; border-bottom: 15px #141b11 solid; border-top: 0px rgba(0, 128, 0, 0) solid; border-bottom-right-radius: 100%; }
+        .top-ledge { position: absolute; height: 8px; width: 50px; top: 55px; left: -23px; background-color: #141912; border-bottom-right-radius: 100%; border-bottom-left-radius: 100%; }
+        .shining-lights-container { position: absolute; height: 100px; width: 800px; left: -399px; top: -39px; animation: left-to-right 6s infinite linear forwards; }
+        @keyframes left-to-right { 0% { transform: rotateY(0deg); opacity: 1; } 50% { transform: rotateY(-180deg); left: -393px; opacity: 0.7; } 100% { transform: rotateY(0deg); opacity: 1; } }
+        .shining-light-left { position: absolute; height: 46px; width: 70%; background: linear-gradient(to right, #f9f59f 0%, rgba(249, 245, 159, 0) 100%); opacity: 0.7; float: left; top: 57px; left: 10px; transform: perspective(529px) rotateX(0deg) rotateY(-120deg) rotate(0deg); }
+        .shining-light-right { position: absolute; height: 46px; left: 236px; width: 70%; top: 56px; background: linear-gradient(to left, #f9f59f 0%, rgba(249, 245, 159, 0) 100%); transform: perspective(529px) rotateX(180deg) rotateY(-120deg) rotate(0deg) skew(1deg); }
+        .glow-shine-container { position: absolute; height: 350px; width: 350px; left: -150px !important; top: -398px !important; border-radius: 100%; background: radial-gradient(ellipse at center, rgba(214, 205, 112, 0.6) 0%, rgba(211, 206, 160, 0) 100%); animation: glowing 6s infinite 1s forwards linear; }
+        @keyframes glowing { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .shine-circle { border-radius: 100%; }
+        .glow-shine-1 { position: absolute; height: 30%; width: 30%; background: #edea89; top: 35%; left: 35%; opacity: 0.2; }
+        .glow-shine-2 { position: relative; height: 10%; width: 10%; background: #edea89; margin: auto; top: 45%; opacity: 0.1; animation: glowing-shine-1 6s infinite 0s forwards ease-in; }
+        .glow-shine-3 { position: absolute; height: 50%; width: 50%; background: #edea89; top: 25%; left: 25%; opacity: 0.05; }
+        .glow-shine-4 { position: absolute; height: 70%; width: 70%; background: #edea89; top: 15%; left: 15%; opacity: 0.05; }
+        .glow-shine-5 { position: absolute; height: 100%; width: 100%; background: #edea89; top: 0%; left: 0%; opacity: 0.05; }
+        @keyframes glowing-shine-1 { 0% { box-shadow: 0px 0px 0px #edea89; opacity: 0.6; transform: scale(1); } 50% { box-shadow: 0px 0px 32px #edea89; opacity: 1; transform: scale(1.2); } 100% { box-shadow: 0px 0px 0px #edea89; opacity: 0.6; transform: scale(1); } }
+        .mid-ledge { position: absolute; height: 8px; width: 52px; top: 100px; left: -24px; background-color: #141912; border-bottom-right-radius: 100%; border-bottom-left-radius: 100%; }
+        .lighthouse-lights { position: absolute; height: 110px; top: -130px; width: 43px; right: 0px; }
+        .light { background: #f9f04c; border-top-right-radius: 20px; border-top-left-radius: 20px; box-shadow: #ffeb3b 0px 0 22px, rgba(252, 250, 185, 0.44) 0 0 3px 1px inset; }
+        .light-right-top { position: relative; height: 26px; top: 0px; width: 10px; right: -24px; }
+        .light-left-middle { position: relative; height: 26px; top: 30px; width: 10px; right: -7px; }
+        .light-left-bottom { position: absolute; height: 18px; top: -15px; width: 8px; right: -22px; border-radius: 0px; }
+        .light-right-bottom { position: absolute; height: 18px; top: -15px; width: 8px; right: -35px; border-radius: 0px; }
+        .glow { position: absolute; height: 22px; width: 22px; background: radial-gradient(ellipse at center, #fbfae1 0%, #fffb6c 100%); top: 28px !important; left: -8px !important; border-radius: 100%; box-shadow: #ffeb3b 0px 0 22px, rgba(252, 250, 185, 0.44) 0 0 3px 1px inset; animation: glowing-ball 6s infinite 0s forwards linear; }
+        @keyframes glowing-ball { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        .topbar { position: absolute; height: 120px; width: 2px; background: #141912; opacity: 0.8; }
+        .top-bar-1 { left: -14px; }
+        .top-bar-2 { left: -8px; }
+        .top-bar-3 { left: -1px; }
+        .top-bar-4 { left: 5.5px; }
+        .top-bar-5 { left: 12px; }
+        .top-bar-6 { left: 18px; }
+        .top-railings { position: absolute; height: 8px; width: 38px; top: 45px; left: -19px; border: 2px solid #141b11; border-radius: 2px; opacity: 0.8; }
+        .railing { position: absolute; height: 10px; width: 2px; background: #141912; top: -1px; }
+        .top-railing-1 { left: 6px; }
+        .top-railing-2 { left: 12px; }
+        .top-railing-3 { left: 19px; }
+        .top-railing-4 { left: 25px; }
+        .top-railing-5 { left: 32px; }
+        .top-railing-6 { left: 35px; }
+        .lh-bottom { position: absolute; height: 25%; width: 100%; left: 0% !important; top: 85% !important; }
+        .ocean-layer { position: absolute; width: 100%; left: 0%; background-size: 100%; background-attachment: fixed; }
+        .top-tier-1 { height: 3vh; top: 0vh; background: radial-gradient(ellipse at center, #c6d1bf 0%, #235161 100%); animation: top-tier-1 4s infinite linear forwards; }
+        @keyframes top-tier-1 { 0% { height: 3vh; } 50% { height: 5vh; } 100% { height: 3vh; } }
+        .top-tier-2 { top: 3vh; height: 3vh; background: radial-gradient(ellipse at center, #93bfa8 0%, #123845 100%); animation: top-tier-2 4s infinite linear forwards; }
+        @keyframes top-tier-2 { 0% { height: 3vh; top: 3vh; } 50% { height: 5vh; top: 4vh; } 100% { top: 3vh; height: 3vh; } }
+        .top-tier-3 { height: 5vh; top: 6vh; background: radial-gradient(ellipse at center, #368981 0%, #07212e 100%); animation: top-tier-3 4s infinite linear forwards; }
+        @keyframes top-tier-3 { 0% { height: 3vh; top: 6vh; } 50% { height: 5vh; top: 8vh; } 100% { top: 6vh; height: 3vh; } }
+        .top-tier-4 { height: 7vh; top: 11vh; background: radial-gradient(ellipse at center, #093d4a 0%, #01101b 100%); animation: top-tier-4 4s infinite linear forwards; }
+        @keyframes top-tier-4 { 0% { height: 7vh; top: 9vh; } 50% { height: 9vh; top: 11vh; } 100% { top: 9vh; height: 7vh; } }
+        .top-tier-5 { height: 7vh; top: 18vh; background: radial-gradient(ellipse at center, #001624 0%, #131515 100%); animation: top-tier-5 4s infinite linear forwards; }
+        @keyframes top-tier-5 { 0% { height: 12vh; top: 14vh; } 50% { height: 12vh; top: 17vh; } 100% { top: 14vh; height: 12vh; } }
+        /* LIGHTHOUSE CSS END */
+
+        /* WORK SAMPLE PAGE STYLES */
+        #image-track {
+            display: flex;
+            gap: 4vmin;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(0%, -50%); 
+            user-select: none; 
+            will-change: transform;
+            transform-style: preserve-3d;
+        }
+
+        /* Wrapper to hold both Loader and Image */
+        .image-wrapper {
+            width: 40vmin;
+            height: 56vmin;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            contain: layout paint; 
+        }
+
+        /* The Image sits on top of the loader */
+        .image-wrapper > .work-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            object-position: 100% center;
+            cursor: pointer; 
+            transition: filter 0.3s ease;
+            will-change: object-position;
+            backface-visibility: hidden;
+            z-index: 2; /* Ensure image is above loader */
+        }
+
+        .image-wrapper > .work-image:hover {
+            filter: brightness(1.1);
+        }
+
+        /* -- Waviy Loading Animation -- */
+        .waviy {
+            position: absolute;
+            z-index: 1; /* Behind image */
+            display: flex;
+            pointer-events: none;
+        }
+
+        .waviy span {
+            position: relative;
+            display: inline-block;
+            font-size: 5vmin; 
+            color: rgba(255, 255, 255, 0.5); 
+            text-transform: uppercase;
+            animation: flip 2s infinite;
+            animation-delay: calc(.2s * var(--i));
+            font-weight: 500;
+            font-family: "Rubik", sans-serif;
+        }
+
+        @keyframes flip {
+            0%, 80% { transform: rotateY(360deg) }
+        }
+
+        /* -- Lightbox Styles -- */
+        #lightbox {
+            position: fixed;
+            z-index: 10001; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: opacity;
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 70vh;
+            object-fit: contain;
+            transform: translateY(-40px) scale(1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.9);
+            border-radius: 4px;
+            cursor: pointer; 
+            user-select: none;
+            will-change: transform, opacity;
+            transform-origin: center center;
+            backface-visibility: hidden;
+        }
+
+        /* -- Line Slider Styles -- */
+        .line-slider-view {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            height: 80px; 
+            z-index: 10003; 
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            overflow: visible;
+        }
+
+        .line-slider-track {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: grab;
+            touch-action: none; 
+            padding: 0 20px;
+            transform: translateZ(0);
+        }
+
+        .line-slider-track:active {
+            cursor: grabbing;
+        }
+
+        .line-wrapper {
+            width: 12px; 
+            height: 80px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            flex-shrink: 0; 
+        }
+
+        .line {
+            width: 1.5px; 
+            height: 12px; 
+            background: #fff;
+            opacity: 0.25;
+            will-change: height, opacity; 
+            transform: translateZ(0); 
+        }
+
+        .line-wrapper:hover .line {
+            opacity: 0.8;
+        }
+
+        /* -- Close Button -- */
+        #lightbox-close-btn {
+            position: fixed;
+            bottom: 15px; 
+            left: 50%;
+            transform: translateX(-50%) scale(0) rotate(180deg);
+            z-index: 10004; 
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px; 
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                        transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            font-family: "Rubik", sans-serif;
+            font-weight: 300; 
+            padding: 0px 10px;
+            line-height: 1;
+        }
+
+        #lightbox-close-btn.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) scale(1) rotate(0deg);
+        }
+        
+        #lightbox-close-btn:hover {
+            color: white;
+        }
+
+        /* Horizontal Scroll Base Styles */
+        .horizontal-section {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-wrap: nowrap;
+            /* Layout Fix: Use Flex to center content vertically */
+            flex-direction: column; 
+            justify-content: center; 
+            position: relative;
+        }
+        
+        .horizontal-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100%;
+            align-items: center; /* Center panels vertically */
+        }
+
+        .panel {
+            width: 100vw;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Reverted to flex-start for Showcase/Archive */
+            position: relative;
+            flex-shrink: 0;
+            padding: 100px 2rem 0 2rem; 
+            border-right: 1px solid rgba(255,255,255,0.05);
+            background: var(--bg-dark); 
+        }
+
+        .panel-img {
+            width: 100%;
+            /* Showcase & Archive Images: Bigger (approx 70vw) and 16:9 */
+            max-width: 1200px; 
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.5s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            border-radius: 1rem; 
+        }
+        
+        .panel:hover .panel-img {
+            filter: grayscale(0%);
+        }
+
+        /* Section Specific Horizontal Progress Bar */
+        .section-progress-container {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            z-index: 20;
+        }
+        .section-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent); /* Verdigris */
+        }
+
+        /* Career & Skills Path Styles */
+        .career-section {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            /* FIX: Center content vertically to prevent hiding */
+            justify-content: center; 
+            position: relative;
+        }
+
+        /* Container for title + progress + timeline */
+        .career-content-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .career-timeline-container {
+            width: 100%;
+            display: flex;
+            flex-direction: row; 
+            align-items: flex-start;
+            padding-left: 10vw; 
+            margin-top: 3rem; 
+        }
+
+        .career-node {
+            flex-shrink: 0;
+            width: 80vw; 
+            max-width: 500px;
+            margin-right: 10vw;
+            position: relative;
+        }
+
+        /* Utility */
+        .line-mask { overflow: hidden; }
+        .line-mask span { display: block; transform: translateY(100%); }
+        
+        /* PRO NAVIGATION STYLES */
+        nav {
+            height: var(--header-height); 
+            display: flex;
+            align-items: center;
+            background: transparent; 
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: background 0.5s ease, backdrop-filter 0.5s ease;
+        }
+        
+        nav.scrolled {
+            background: rgba(19, 21, 21, 0.8); /* Onyx with opacity */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .nav-content {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Push items to edges */
+            width: 100%;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: none; /* Hidden on mobile */
+            align-items: center;
+            gap: 0; /* We use lines as gap */
+        }
+        @media (min-width: 1024px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-item {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            text-decoration: none; /* Added */
+        }
+
+        .nav-item:hover {
+            color: var(--text-light);
+        }
+
+        .nav-item.active {
+            color: var(--accent); 
+        }
+
+        /* Connection Lines */
+        .nav-line {
+            width: 20px; /* Default width */
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            margin: 0 2px;
+        }
+        
+        /* Adjust line width on larger screens to fit "Do not change header size" while being responsive */
+        @media (min-width: 1280px) {
+            .nav-line { width: 30px; }
+        }
+
+        .nav-line-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent);
+            transition: width 0.1s linear; /* Smooth fill via JS/GSAP */
+        }
+
+        /* The Global Progress Bar (Acting as the Border) */
+        .global-progress-container {
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100%; 
+            height: 1px; 
+            background: rgba(255, 255, 255, 0.1); 
+            z-index: 50;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+        
+        nav.scrolled .global-progress-container {
+            opacity: 1;
+        }
+        
+        .global-progress-bar {
+            height: 2px; 
+            width: 0%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .header-title-container {
+            height: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header-title-text {
+            display: block;
+            line-height: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-light);
+        }
+
+        /* HIGHLIGHT TEXT STYLES */
+        .reveal-type span {
+            transition: color 0.1s;
+        }
+        
+        /* Text Reveal Helper for Skills (New) */
+        .reveal-type-skills span {
+            transition: color 0.1s;
+        }
+
+        .intro-text p {
+            /* REVERTED: Smaller Text Size as requested */
+            font-size: clamp(1rem, 2vw, 1.25rem); 
+            line-height: 1.6;
+        }
+        
+        .section-label {
+            will-change: transform, opacity; 
+            color: var(--accent); 
+        }
+
+        /* Text Filling Animation Styles */
+        .fill-text-wrapper {
+            position: relative;
+            display: inline-block;
+            color: var(--graphite); /* Unfilled color */
+        }
+        
+        .fill-text-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            color: var(--text-light); /* Filled white color */
+            overflow: hidden;
+            white-space: nowrap;
+            transition: width 0.1s linear; /* Smooth fill handled by GSAP */
+        }
+
+        /* Glitter Animation for Footer */
+        .glitter-text {
+            /* UPDATED: Dark Graphite to Silver gradient for Light Background */
+            background: linear-gradient(
+                to right,
+                #131515 0%,
+                #9ca3af 40%,
+                #9ca3af 60%,
+                #131515 100%
+            );
+            background-size: 200% auto;
+            color: var(--onyx); /* Fallback */
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glitter-shine 4s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes glitter-shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        /* Gallery Swatch Styles */
+        .palette-container {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .color-swatch {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px; /* Square Shape */
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: pointer;
+        }
+        .color-swatch::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+        .color-swatch:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .color-swatch:hover::after {
+            opacity: 1;
+        }
+        
+        /* Gallery Panel Override for Alignment */
+        .gallery-panel {
+            align-items: center !important; /* CENTERED VERTICALLY */
+            padding-top: 120px !important; /* Added buffer to clear header */
+            padding-bottom: 8vh; /* Shifted UP from bottom slightly */
+        }
+        
+        @media (max-width: 768px) {
+            .gallery-panel {
+                padding-top: 100px !important;
+                padding-bottom: 50px !important;
+                align-items: flex-start !important;
+            }
+        }
+
+        /* --- STACK SLIDER STYLES --- */
+        .stack-container {
+            width: 100%;
+            max-width: 60vh; /* BALANCED: 60vh for comfortable viewing without full screen domination */
+            aspect-ratio: 1/1; /* 1:1 Ratio */
+            position: relative;
+            perspective: 1000px;
+            margin-bottom: 0; 
+        }
+        @media (min-width: 768px) {
+            .stack-container {
+                width: 100%; 
+            }
+        }
+        
+        .stack-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            touch-action: pan-y; 
+        }
+
+        .stack-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+            z-index: 0;
+            opacity: 0;
+            pointer-events: none;
+            cursor: grab;
+        }
+        .stack-img:active {
+            cursor: grabbing;
+        }
+
+        .stack-img.active {
+            z-index: 10;
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+        .stack-img.next {
+            z-index: 5;
+            opacity: 1;
+            transform: scale(0.95) translateY(10px);
+            filter: brightness(0.7);
+        }
+
+        /* Premium Slider Controls - Moved 15px BELOW the image (56px btn height + 15px margin = 71px offset) */
+        .slider-controls {
+            position: absolute;
+            bottom: -71px; 
+            left: 50%;
+            transform: translateX(-50%); 
+            display: flex;
+            gap: 25px;
+            z-index: 25; 
+            pointer-events: auto;
+        }
+        
+        .slider-btn {
+            width: 56px; height: 56px; /* Larger targets */
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .slider-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            transition: transform 0.3s ease;
+        }
+
+        .slider-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .slider-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Cute Shuffling Animation */
+        .slider-btn:hover svg {
+            animation: wobble 0.5s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px) rotate(-5deg); }
+            75% { transform: translateX(2px) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor"></div>
+
+    <!-- PRELOADER -->
+    <div class="preloader">
+        <div class="font-display text-4xl tracking-widest font-bold text-white" id="counter">0%</div>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+
+    <!-- BACKGROUND LAYERS -->
+    <!-- Layer 2: Floating Feather (Above Content) -->
+    <div id="feather-container"></div>
+
+    <!-- NAVIGATION (Pro Sticky Header) -->
+    <nav class="fixed top-0 left-0 w-full px-8 md:px-12 z-50">
+        <div class="nav-content group">
+            <!-- Dynamic Name -->
+            <div class="flex items-baseline gap-3">
+                <!-- Static Part -->
+                <span class="font-display text-sm font-bold tracking-[0.15em] text-[#fffafb]">RAJAT SINGH</span>
+                
+                <!-- Separator -->
+                <span class="font-display text-sm font-bold text-gray-500">|</span>
+                
+                <!-- Dynamic Part -->
+                <div class="header-title-container">
+                    <span class="header-title-text font-display text-[#339989] text-xs" id="dynamic-header">GRAPHIC DESIGNER</span>
+                </div>
+            </div>
+
+            <!-- Header Navigation with Connecting Lines -->
+            <div class="nav-links font-display">
+                <!-- ACCESSIBILITY FIX: Added HREF and moved event to JS mostly, preventing default -->
+                <a href="#hero" class="nav-item" data-target="hero" onclick="event.preventDefault(); scrollToSection('hero')">HOME</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-hero-intro"></div></div>
+                
+                <a href="#intro" class="nav-item" data-target="intro" onclick="event.preventDefault(); scrollToSection('intro')">INTRO</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-intro-experience"></div></div>
+                
+                <a href="#experience" class="nav-item" data-target="experience" onclick="event.preventDefault(); scrollToSection('experience')">CAREER</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-experience-skills"></div></div>
+                
+                <a href="#skills" class="nav-item" data-target="skills" onclick="event.preventDefault(); scrollToSection('skills')">SKILLS</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-skills-showcase"></div></div>
+                
+                <a href="#showcase" class="nav-item" data-target="showcase" onclick="event.preventDefault(); scrollToSection('showcase')">SHOWCASE</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-showcase-samples"></div></div>
+                
+                <a href="#samples" class="nav-item" data-target="samples" onclick="event.preventDefault(); scrollToSection('samples')">GALLERY</a>
+                
+                <div class="nav-line"><div class="nav-line-progress" id="line-samples-contact"></div></div>
+                
+                <a href="#contact" class="nav-item" data-target="contact" onclick="event.preventDefault(); scrollToSection('contact')">CONTACT</a>
+            </div>
+        </div>
+
+        <!-- Global Progress Bar (The "Border") -->
+        <div class="global-progress-container">
+            <div class="global-progress-bar" id="page-progress"></div>
+        </div>
+    </nav>
+
+    <!-- CONTENT WRAPPER -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+            
+            <!-- HERO SECTION with Lighthouse Parallax -->
+            <section id="hero" class="h-screen w-full flex flex-col justify-end px-6 md:px-20 relative pb-[15vh] overflow-hidden">
+                <!-- LIGHTHOUSE SCENE START -->
+                <div id="scene" style="position: absolute; inset: 0; z-index: -1;">
+                    <div class="sky" style="position: absolute; height: 100%; width: 100%;">
+                        <div class="stars layer" data-depth="0.3">
+                            <!-- Only a few stars for brevity, but the animation style is kept -->
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                            <div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div>
+                        </div>
+                    </div>
+                    <div class="lh-container">
+                        <div class="lh-top layer" data-depth="0.1">
+                            <div class="light-house">
+                                <div class="top-triangle">
+                                    <div class="top-triangle-circle-top"></div>
+                                    <div class="top-triangle-circle-middle"></div>
+                                    <div class="top-triangle-circle"></div>
+                                    <div class="glow layer" data-depth="0.01"></div>
+                                    <div class="shining-lights-container">
+                                        <div class="shining-light-left"></div>
+                                        <div class="shining-light-right"></div>
+                                    </div>
+                                    <div class="top-ledge"></div>
+                                    <div class="top-bars">
+                                        <div class="top-bar-1 topbar"></div>
+                                        <div class="top-bar-2 topbar"></div>
+                                        <div class="top-bar-3 topbar"></div>
+                                        <div class="top-bar-4 topbar"></div>
+                                        <div class="top-bar-5 topbar"></div>
+                                        <div class="top-bar-6 topbar"></div>
+                                    </div>
+                                    <div class="top-railings">
+                                        <div class="top-railing-1 railing"></div>
+                                        <div class="top-railing-2 railing"></div>
+                                        <div class="top-railing-3 railing"></div>
+                                        <div class="top-railing-4 railing"></div>
+                                        <div class="top-railing-5 railing"></div>
+                                        <div class="top-railing-6 railing"></div>
+                                    </div>
+                                    <div class="mid-ledge"></div>
+                                    <div class="mid-railings">
+                                        <div class="overlay"></div>
+                                        <div class="mid-railings-rail">
+                                            <div class="mid-rail mid-rail-1"></div>
+                                            <div class="mid-rail mid-rail-2"></div>
+                                            <div class="mid-rail mid-rail-3"></div>
+                                            <div class="mid-rail mid-rail-5"></div>
+                                            <div class="mid-rail mid-rail-6"></div>
+                                        </div>
+                                        <div class="left-mid-railings"></div>
+                                        <div class="right-mid-railings"></div>
+                                    </div>
+                                </div>
+                                <div class="panel-container" id="rotate-x">
+                                    <div class="left-mid-roof"></div>
+                                    <div class="left-mid-roof-2"></div>
+                                    <div class="panel" style="width: 50px; background: #141912; min-height: 220px; border: none; padding: 0;"></div>
+                                </div>
+                                <div class="light"></div>
+                                <div class="right-attachment">
+                                    <div class="right-roof"></div>
+                                    <div class="right-building"></div>
+                                </div>
+                                <div class="lighthouse-lights">
+                                    <div class="light-right-top light"></div>
+                                    <div class="light-left-middle light"></div>
+                                </div>
+                                <div class="lighthouse-bottom-lights">
+                                    <div class="light-right-bottom light"></div>
+                                    <div class="light-left-bottom light"></div>
+                                </div>
+                                <div class="back-rocks">
+                                    <div class="back-rock-1"></div>
+                                    <div class="back-rock-2"></div>
+                                    <div class="back-rock-3"></div>
+                                </div>
+                                <div class="front-rocks">
+                                    <div class="front-rock-1"></div>
+                                    <div class="satellite"></div>
+                                    <div class="front-rock-2"></div>
+                                    <div class="front-rock-3"></div>
+                                </div>
+                                <!-- Removed: <div class="shooting-stars"></div> (Empty tag) -->
+                                <div class="glow-shine-container layer" data-depth="0.1">
+                                    <div class="glow-shine-5 shine-circle"></div>
+                                    <div class="glow-shine-4 shine-circle"></div>
+                                    <div class="glow-shine-3 shine-circle"></div>
+                                    <div class="glow-shine-1 shine-circle"></div>
+                                    <div class="glow-shine-2 shine-circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lh-bottom">
+                            <div class="ocean">
+                                <div class="top-tier-1 ocean-layer"></div>
+                                <div class="top-tier-2 ocean-layer"></div>
+                                <div class="top-tier-3 ocean-layer"></div>
+                                <div class="top-tier-4 ocean-layer"></div>
+                                <div class="top-tier-5 ocean-layer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- LIGHTHOUSE SCENE END -->
+
+                <div class="line-mask mb-2 relative z-10">
+                    <span class="hero-line font-display text-[10vw] leading-[0.8] tracking-tighter mix-blend-overlay">DIGITAL</span>
+                </div>
+                <div class="line-mask mb-2 ml-[10vw] relative z-10">
+                    <span class="hero-line font-display text-[10vw] leading-[0.8] tracking-tighter text-white mix-blend-difference">DESIGN</span>
+                </div>
+                <div class="line-mask relative z-10">
+                    <span class="hero-line font-display text-[10vw] leading-[0.8] tracking-tighter opacity-50 stroke-text">EXPERIENCE</span>
+                </div>
+
+                <!-- Adjusted position: 15% (Sea Level) + 10px up -->
+                <div class="absolute right-2 md:right-6 max-w-sm text-right z-10" style="bottom: calc(15% + 10px);">
+                    <p class="text-xs md:text-sm text-gray-400 leading-relaxed hero-fade opacity-0 translate-y-4">
+                        Creative and detail-oriented Graphic Designer with 3+ years of experience.
+                        Based in India, globally available.
+                    </p>
+                    <div class="mt-8 flex justify-end hero-fade opacity-0">
+                         <div class="w-6 h-10 border border-[#5f9986] rounded-full flex justify-center pt-2">
+                             <div class="w-1 h-1 bg-white rounded-full animate-bounce"></div>
+                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. INTRO SECTION (Full Width, Top Aligned) -->
+            <section id="intro" class="min-h-screen w-full bg-[#131515] relative z-10 pt-10">
+                <div class="w-full px-6 md:px-24 flex flex-col md:flex-row gap-10 items-center justify-between"> 
+                    
+                    <!-- Left Column: Text (Expanded Width) -->
+                    <div class="w-full md:w-3/5 flex flex-col justify-center">
+                        <!-- Label -->
+                        <div class="mb-4">
+                            <span class="section-label text-xs font-bold uppercase tracking-[0.2em] text-[#339989] block mb-2 inline-block origin-left">Introduction</span>
+                            <div class="w-12 h-[1px] bg-[#fffafb] opacity-50"></div>
+                        </div>
+
+                        <!-- Heading -->
+                        <h2 class="font-display text-5xl md:text-7xl mb-8 text-[#fffafb] leading-tight uppercase">
+                            <span class="text-[#339989]">Hello, I'm</span><br>Rajat.
+                        </h2>
+                        
+                        <!-- Intro Text -->
+                        <div class="w-full intro-text pr-0 md:pr-10">
+                            <p class="reveal-type text-[#7de2d1] font-light mb-6 leading-relaxed opacity-90">
+                                I am a Creative Graphic Designer creating visually compelling assets. Proven ability to communicate brand messages effectively and leave a lasting impact on audiences through digital and print media.
+                            </p>
+                            
+                            <p class="reveal-type text-[#7de2d1] font-light leading-relaxed opacity-90">
+                                Skilled in Adobe Creative Suite, Figma, and emerging AI design tools. I provide end-to-end design solutions, from Brand Identity to complex Visual Communication strategies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Image (Smaller & Aligned Right) -->
+                    <div class="w-full md:w-2/5 flex justify-center md:justify-end">
+                        <div class="relative group w-full max-w-[280px]">
+                            <!-- Image Container with Decoration -->
+                            <div class="absolute -inset-2 bg-gradient-to-r from-[#339989] to-[#7de2d1] rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur-lg"></div>
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" 
+                                class="relative w-full rounded-2xl grayscale group-hover:grayscale-0 transition duration-700 object-cover aspect-[3/4] shadow-2xl border border-white/10" 
+                                alt="Rajat Singh Portrait">
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 2. CAREER PATH -->
+            <section id="experience" class="career-section relative z-10 bg-[#fffafb] border-t border-[#2b2c28]/10">
+                <div class="career-content-block">
+                    <div class="w-full px-6 md:px-20">
+                        <span class="section-label text-xs font-bold uppercase tracking-[0.2em] text-[#339989] block mb-2 inline-block">Experience</span>
+                        <h2 class="font-display text-6xl md:text-8xl text-[#131515]">CAREER PATH</h2>
+                    </div>
+
+                    <!-- Progress Track -->
+                    <div class="w-full h-[2px] bg-[#2b2c28]/20 relative mt-8 mb-4 overflow-hidden">
+                        <div class="career-progress-bar absolute top-0 left-0 h-full bg-[#131515] w-0 shadow-[0_0_15px_rgba(0,0,0,0.2)]"></div>
+                    </div>
+
+                    <!-- Horizontal Scroll Container -->
+                    <div class="career-timeline-wrapper overflow-hidden w-full">
+                        <div class="career-timeline-container flex">
+                            
+                            <!-- Role 1 -->
+                            <div class="career-node">
+                                <div class="border-l border-[#2b2c28]/30 pl-6 py-2">
+                                    <span class="text-xs text-[#339989] uppercase tracking-widest block mb-2 font-bold whitespace-nowrap">2023 — Present</span>
+                                    <h3 class="font-display text-4xl md:text-5xl text-[#131515] mb-2">POLLXPERTS</h3>
+                                    <p class="text-lg text-[#2b2c28] mb-4 font-medium">Graphic Designer / Delhi</p>
+                                    <ul class="text-sm text-[#2b2c28]/80 space-y-2 list-disc list-inside leading-relaxed">
+                                        <li>End-to-end design for political consulting.</li>
+                                        <li>Visual identity for 7+ major clients.</li>
+                                        <li>Print collateral & merchandise design.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Role 2 -->
+                            <div class="career-node">
+                                <div class="border-l border-[#2b2c28]/30 pl-6 py-2">
+                                    <span class="text-xs text-[#339989] uppercase tracking-widest block mb-2 font-bold whitespace-nowrap">2022 — 2023</span>
+                                    <h3 class="font-display text-4xl md:text-5xl text-[#131515] mb-2">DESIGN AVENUE</h3>
+                                    <p class="text-lg text-[#2b2c28] mb-4 font-medium">Graphic Designer / Mumbai</p>
+                                    <ul class="text-sm text-[#2b2c28]/80 space-y-2 list-disc list-inside leading-relaxed">
+                                        <li>Visual assets for IT Services & Consulting.</li>
+                                        <li>UI elements for web & mobile apps.</li>
+                                        <li>Product packaging & brand assets.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="career-node">
+                                <div class="border-l border-[#2b2c28]/30 pl-6 py-2">
+                                    <span class="text-xs text-[#339989] uppercase tracking-widest block mb-2 font-bold whitespace-nowrap">2018 — 2024</span>
+                                    <h3 class="font-display text-4xl md:text-5xl text-[#131515] mb-2">EDUCATION</h3>
+                                    <p class="text-lg text-[#2b2c28] mb-4 font-medium">MBA & B.Sc.</p>
+                                    <ul class="text-sm text-[#2b2c28]/80 space-y-2 list-disc list-inside leading-relaxed">
+                                        <li>MBA - Barkatullah University (2022-24)</li>
+                                        <li>B.Sc. - Allahabad State University (2018-21)</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. SKILLS SECTION (VERTICAL GRID - UPDATED) -->
+            <section id="skills" class="min-h-screen w-full relative z-10 bg-[#fffafb] border-t border-[#2b2c28]/10 flex items-center py-20">
+                <div class="w-full px-6 md:px-20 flex flex-col md:flex-row gap-12 md:gap-20">
+                    
+                    <div class="w-full md:w-1/3 flex flex-col justify-center">
+                        <span class="section-label text-xs font-bold uppercase tracking-[0.2em] text-[#5f9986] block mb-2 inline-block">Expertise</span>
+                        <div class="w-12 h-[1px] bg-[#131515] opacity-50 mb-8"></div>
+                        
+                        <h2 class="font-display text-6xl md:text-8xl text-[#131515] mb-6 leading-none">
+                            TOOLS &<br><span class="text-[#5f9986]">STACK</span>
+                        </h2>
+                        
+                        <p class="text-[#2b2c28] text-sm leading-relaxed max-w-xs opacity-80 mt-4 reveal-type-skills">
+                            A curated list of software and technologies I utilize to bring creative visions to life. From pixel-perfect layouts to motion graphics.
+                        </p>
+                    </div>
+
+                    <div class="w-full md:w-2/3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+                        
+                        <div class="skill-group opacity-0 translate-y-8 p-6 border border-[#2b2c28]/10 bg-white rounded-xl shadow-lg">
+                            <h3 class="font-display text-2xl text-[#131515] mb-4 border-b border-[#2b2c28]/10 pb-2">DESIGN</h3>
+                            <ul class="text-[#2b2c28] space-y-3">
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Adobe Photoshop</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Adobe Illustrator</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Figma (UI/UX)</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> CorelDraw</li>
+                            </ul>
+                        </div>
+
+                        <div class="skill-group opacity-0 translate-y-8 p-6 border border-[#2b2c28]/10 bg-white rounded-xl shadow-lg">
+                            <h3 class="font-display text-2xl text-[#131515] mb-4 border-b border-[#2b2c28]/10 pb-2">MOTION</h3>
+                            <ul class="text-[#2b2c28] space-y-3">
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Premiere Pro</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Adobe Lightroom</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> After Effects</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> CapCut</li>
+                            </ul>
+                        </div>
+
+                        <div class="skill-group opacity-0 translate-y-8 p-6 border border-[#2b2c28]/10 bg-white rounded-xl shadow-lg">
+                            <h3 class="font-display text-2xl text-[#131515] mb-4 border-b border-[#2b2c28]/10 pb-2">STRATEGY</h3>
+                            <ul class="text-[#2b2c28] space-y-3">
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Midjourney / AI</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Brand Identity</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Visual Comm.</li>
+                                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 bg-[#5f9986] rounded-full"></div> Social Media</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. HORIZONTAL SCROLL 1 (SHOWCASE) -->
+            <section id="showcase" class="horizontal-section relative">
+                
+                <!-- Title -->
+                <div class="absolute top-[60px] left-0 w-full flex justify-center z-30 pointer-events-none">
+                     <div class="fill-text-wrapper font-display text-xl uppercase tracking-[0.3em] font-bold">
+                        SELECTED WORKS
+                        <div class="fill-text-overlay">SELECTED WORKS</div>
+                    </div>
+                </div>
+
+                <div class="horizontal-wrapper" style="width: 400%;"> 
+                    <!-- Panel 1 -->
+                    <div class="panel">
+                        <div class="flex flex-col md:flex-row items-center max-w-6xl w-full gap-20 mt-12">
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-start">
+                                <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop" class="panel-img rounded-2xl aspect-video object-cover" alt="Abstract 3D Liquid">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <span class="text-xs text-[#339989] tracking-widest uppercase mb-4 block">01 — Campaign</span>
+                                <h2 class="font-display text-6xl md:text-7xl mb-6 text-[#fffafb]">ELECTION<br>2024</h2>
+                                <p class="text-[#7de2d1] max-w-md">Comprehensive visual identity. Banners, posters, and digital assets.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Panel 2 -->
+                    <div class="panel">
+                        <div class="flex flex-col md:flex-row-reverse items-center max-w-6xl w-full gap-20 mt-12">
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-start">
+                                <img src="https://images.unsplash.com/photo-1633613286991-611fe299c4be?q=80&w=1000&auto=format&fit=crop" class="panel-img rounded-2xl aspect-video object-cover" alt="Abstract Gradient">
+                            </div>
+                            <div class="w-full md:w-1/2 text-right md:text-left">
+                                <span class="text-xs text-[#339989] tracking-widest uppercase mb-4 block">02 — Branding</span>
+                                <h2 class="font-display text-6xl md:text-7xl mb-6 text-[#fffafb]">TECH<br>REBRAND</h2>
+                                <p class="text-[#7de2d1] max-w-md">Corporate identity overhaul. Logo, stationery, and guidelines.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Panel 3 -->
+                    <div class="panel">
+                        <div class="flex flex-col md:flex-row items-center max-w-6xl w-full gap-20 mt-12">
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+                                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" class="panel-img rounded-2xl aspect-video object-cover" alt="Abstract Flow">
+                            </div>
+                            <div class="w-full md:w-1/2">
+                                <span class="text-xs text-[#339989] tracking-widest uppercase mb-4 block">03 — Digital</span>
+                                <h2 class="font-display text-6xl md:text-7xl mb-6 text-[#fffafb]">SOCIAL<br>SUITE</h2>
+                                <p class="text-[#7de2d1] max-w-md">High-engagement carousel designs and event creatives.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Panel 4 -->
+                    <div class="panel">
+                        <div class="flex flex-col md:flex-row-reverse items-center max-w-6xl w-full gap-20 mt-12">
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-start">
+                                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop" class="panel-img rounded-2xl aspect-video object-cover" alt="Abstract Glass">
+                            </div>
+                            <div class="w-full md:w-1/2 text-right md:text-left">
+                                <span class="text-xs text-[#339989] tracking-widest uppercase mb-4 block">04 — Print</span>
+                                <h2 class="font-display text-6xl md:text-7xl mb-6 text-[#fffafb]">PRODUCT<br>PACKAGING</h2>
+                                <p class="text-[#7de2d1] max-w-md">Tangible brand assets including labels and packaging.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-progress-container">
+                    <div class="section-progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- 6. NEW GALLERY SECTION (AUTO PALETTE & 1:1 STACK) -->
+            <section id="samples" class="horizontal-section relative">
+                <!-- Title -->
+                <div class="absolute top-[60px] left-0 w-full flex justify-center z-30 pointer-events-none">
+                     <div class="fill-text-wrapper font-display text-xl uppercase tracking-[0.3em] font-bold">
+                        GALLERY
+                        <div class="fill-text-overlay">GALLERY</div>
+                    </div>
+                </div>
+
+                <!-- Wrapper for Panels -->
+                <div class="horizontal-wrapper" style="width: 300%;"> 
+                    
+                    <!-- Gallery Item 1: Neon Vibes (STACK) -->
+                    <div class="panel gallery-panel">
+                        <div class="flex flex-col md:flex-row items-start max-w-6xl w-full gap-10 md:gap-20 px-4 h-full">
+                            
+                            <!-- Left: Details & Palette -->
+                            <div class="w-full md:w-1/2 flex flex-col justify-center items-start text-left order-2 md:order-1 pt-4 md:pt-0">
+                                <span class="text-sm text-[#339989] font-bold tracking-widest uppercase mb-2 block font-display">Social Media</span>
+                                <h2 class="font-display text-5xl md:text-7xl mb-6 text-[#fffafb] leading-tight">NEON VIBES</h2>
+                                <p class="text-[#7de2d1] text-lg font-light max-w-md mb-8 leading-relaxed opacity-90">
+                                    A high-energy social campaign focusing on youth culture and nightlife events. Bold neon gradients meet dark aesthetics to capture attention immediately.
+                                </p>
+                                
+                                <!-- Auto Color Palette Container -->
+                                <div class="border-t border-white/10 pt-6 w-full max-w-md">
+                                    <span class="text-xs text-gray-500 uppercase tracking-widest mb-4 block font-semibold">Generated Palette</span>
+                                    <div class="palette-container" id="palette-1">
+                                        <!-- Palettes generated by JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Image Stack (Square 1:1) -->
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-end order-1 md:order-2 h-auto md:h-full items-center">
+                                <div class="stack-container" id="stack-1">
+                                    <div class="stack-wrapper">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&h=1080&fit=crop" class="stack-img active" alt="Neon 1">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1565527376-79df920f0343?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Neon 2">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Neon 3">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1581368142842-83b06323c23e?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Neon 4">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1496482475496-a91f31e0386c?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Neon 5">
+                                    </div>
+                                    <!-- Premium Slider Controls -->
+                                    <div class="slider-controls">
+                                        <div class="slider-btn prev" aria-label="Previous Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                                        </div>
+                                        <div class="slider-btn next" aria-label="Next Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Item 2: Eco Cafe (STACK) -->
+                    <div class="panel gallery-panel">
+                        <div class="flex flex-col md:flex-row items-start max-w-6xl w-full gap-10 md:gap-20 px-4 h-full">
+                            
+                            <!-- Left: Details & Palette -->
+                            <div class="w-full md:w-1/2 flex flex-col justify-center items-start text-left order-2 md:order-1 pt-4 md:pt-0">
+                                <span class="text-sm text-[#339989] font-bold tracking-widest uppercase mb-2 block font-display">Brand Identity</span>
+                                <h2 class="font-display text-5xl md:text-7xl mb-6 text-[#fffafb] leading-tight">ECO CAFE</h2>
+                                <p class="text-[#7de2d1] text-lg font-light max-w-md mb-8 leading-relaxed opacity-90">
+                                    Complete branding suite for an organic coffee shop. Earthy tones, recycled paper textures, and a custom logotype designed to evoke sustainability.
+                                </p>
+                                
+                                <div class="border-t border-white/10 pt-6 w-full max-w-md">
+                                    <span class="text-xs text-gray-500 uppercase tracking-widest mb-4 block font-semibold">Generated Palette</span>
+                                    <div class="palette-container" id="palette-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Image Stack -->
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-end order-1 md:order-2 h-auto md:h-full items-center">
+                                <div class="stack-container" id="stack-2">
+                                    <div class="stack-wrapper">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1080&h=1080&fit=crop" class="stack-img active" alt="Eco 1">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Eco 2">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Eco 3">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Eco 4">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1507133750069-41e57540f1f4?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Eco 5">
+                                    </div>
+                                    <div class="slider-controls">
+                                        <div class="slider-btn prev" aria-label="Previous Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                                        </div>
+                                        <div class="slider-btn next" aria-label="Next Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Item 3: Music Fest (STACK) -->
+                    <div class="panel gallery-panel">
+                        <div class="flex flex-col md:flex-row items-start max-w-6xl w-full gap-10 md:gap-20 px-4 h-full">
+                            
+                            <!-- Left: Details & Palette -->
+                            <div class="w-full md:w-1/2 flex flex-col justify-center items-start text-left order-2 md:order-1 pt-4 md:pt-0">
+                                <span class="text-sm text-[#339989] font-bold tracking-widest uppercase mb-2 block font-display">Print Design</span>
+                                <h2 class="font-display text-5xl md:text-7xl mb-6 text-[#fffafb] leading-tight">MUSIC FEST</h2>
+                                <p class="text-[#7de2d1] text-lg font-light max-w-md mb-8 leading-relaxed opacity-90">
+                                    Poster series for an indie music festival. Distorted typography, grain textures, and a custom logotype designed to evoke sustainability.
+                                </p>
+                                
+                                <div class="border-t border-white/10 pt-6 w-full max-w-md">
+                                    <span class="text-xs text-gray-500 uppercase tracking-widest mb-4 block font-semibold">Generated Palette</span>
+                                    <div class="palette-container" id="palette-3"></div>
+                                </div>
+                            </div>
+
+                            <!-- Right: Image Stack -->
+                            <div class="w-full md:w-1/2 flex justify-center md:justify-end order-1 md:order-2 h-auto md:h-full items-center">
+                                <div class="stack-container" id="stack-3">
+                                    <div class="stack-wrapper">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?q=80&w=1080&h=1080&fit=crop" class="stack-img active" alt="Music 1">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Music 2">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1514525253440-b393452e3728?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Music 3">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1459749411168-04f814a84550?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Music 4">
+                                        <img crossorigin="anonymous" src="https://images.unsplash.com/photo-1501612780327-4504c53ee10d?q=80&w=1080&h=1080&fit=crop" class="stack-img" alt="Music 5">
+                                    </div>
+                                    <div class="slider-controls">
+                                        <div class="slider-btn prev" aria-label="Previous Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                                        </div>
+                                        <div class="slider-btn next" aria-label="Next Slide">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-progress-container">
+                    <div class="section-progress-bar"></div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <section id="contact" class="h-screen flex flex-col justify-center items-center relative z-10 bg-[#fffafb]">
+                
+                <!-- Main Content Container Centered -->
+                <div class="flex flex-col items-center justify-center relative z-20 w-full pt-5">
+                    
+                    <!-- 1. THANK YOU (Changed from <a> to <h1> to fix reload error) -->
+                    <h1 class="glitter-text font-display text-[15vw] md:text-[18vw] leading-none hover:scale-105 transition-transform duration-500 cursor-default select-none">
+                        THANK YOU
+                    </h1>
+                    
+                    <!-- 2. See More Work Button (Added relative z-30 to bring to front) -->
+                    <a href="#" id="see-more-btn" class="relative z-30 mt-6 mb-8 px-8 py-3 rounded-full border border-[#5f9986] text-[#5f9986] text-xs font-bold tracking-[0.15em] hover:bg-[#5f9986] hover:text-[#fffafb] transition-all duration-300 uppercase">
+                        WORK SAMPLES
+                    </a>
+                    
+                    <!-- 3. Email Button (Always Filled, Added relative z-30) -->
+                    <a href="mailto:rajatavenue@gmail.com" class="relative z-30 flex items-center gap-4 text-white transition-all mb-0 group border border-[#131515] bg-[#131515] px-6 py-3 rounded-full hover:scale-105 hover:shadow-[0_0_20px_rgba(19,21,21,0.4)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-12 transition-transform duration-300"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        <span class="text-base tracking-wider">rajatavenue@gmail.com</span>
+                    </a>
+
+                </div>
+
+                <footer class="absolute bottom-0 w-full h-[40px] px-8 md:px-12 flex items-center justify-between text-xs uppercase tracking-wider text-[#2b2c28]">
+                    <span>© 2025 Rajat Singh</span>
+                    <div class="flex gap-6">
+                        <a href="https://www.linkedin.com/in/rajatavenue" target="_blank" rel="noopener noreferrer" class="hover:text-[#5f9986] transition-colors">LinkedIn</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#5f9986] transition-colors">Behance</a>
+                    </div>
+                </footer>
+            </section>
+        </div>
+    </div>
+
+    <!-- NEW: WORK SAMPLES OVERLAY PAGE -->
+    <div id="work-overlay" class="fixed left-0 right-0 top-[40px] bottom-[40px] z-[100] hidden pointer-events-none">
+        <!-- REPLACED: Background Layer with Split Shutters -->
+        <!-- Top Shutter: Fixed top, dynamic height via JS -->
+        <div id="shutter-top" class="absolute left-0 top-0 w-full bg-[#131515] z-0 origin-bottom transform scale-y-0"></div>
+        
+        <!-- Bottom Shutter: Dynamic top via JS, fixed bottom -->
+        <div id="shutter-bottom" class="absolute left-0 bottom-0 w-full bg-[#131515] z-0 origin-top transform scale-y-0"></div>
+        
+        <!-- 4 Corner Close Buttons for Overlay -->
+        <button class="close-overlay-btn absolute top-[10px] left-[10px] text-[#339989] hover:text-white transition-colors z-20 pointer-events-auto p-4" aria-label="Close Overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-[135deg]"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <button class="close-overlay-btn absolute top-[10px] right-[10px] text-[#339989] hover:text-white transition-colors z-20 pointer-events-auto p-4" aria-label="Close Overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-[-135deg]"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <button class="close-overlay-btn absolute bottom-[10px] left-[10px] text-[#339989] hover:text-white transition-colors z-20 pointer-events-auto p-4" aria-label="Close Overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-[45deg]"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <button class="close-overlay-btn absolute bottom-[10px] right-[10px] text-[#339989] hover:text-white transition-colors z-20 pointer-events-auto p-4" aria-label="Close Overlay">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rotate-[-45deg]"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+
+        <!-- Container for the Image Track Work Samples -->
+        <div id="work-overlay-content" class="absolute inset-0 flex items-center justify-center opacity-0 z-10 pointer-events-auto">
+            
+            <div id="image-track" data-mouse-down-at="0" data-prev-percentage="0">
+                <!-- Images injected via JS -->
+            </div>
+
+            <div class="line-slider-view">
+                <div class="line-slider-track" id="lineSliderTrack"></div>
+            </div>
+
+            <div id="lightbox">
+                <img id="lightbox-img" src="" alt="Fullscreen Image">
+            </div>
+            
+            <div id="lightbox-close-btn">X</div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. SETUP & LOADER ---
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+        
+        const preloader = document.querySelector('.preloader');
+        const counter = document.getElementById('counter');
+        const progress = document.querySelector('.loader-progress');
+        
+        let count = 0;
+        const interval = setInterval(() => {
+            count += Math.floor(Math.random() * 5) + 1;
+            if (count > 100) count = 100;
+            
+            counter.innerText = count + '%';
+            progress.style.width = count + '%';
+            
+            if (count === 100) {
+                clearInterval(interval);
+                revealSite();
+            }
+        }, 30);
+
+        function revealSite() {
+            const tl = gsap.timeline();
+            
+            tl.to('.preloader', {
+                yPercent: -100,
+                duration: 1.2,
+                ease: "power4.inOut"
+            })
+            .fromTo('#feather-container', { opacity: 0 }, { opacity: 1, duration: 1 }, "-=0.5")
+            .to('.hero-line', {
+                y: 0,
+                duration: 1.5,
+                stagger: 0.1,
+                ease: "power4.out"
+            }, "-=0.8")
+            .to('.hero-fade', {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power2.out"
+            }, "-=1");
+        }
+
+        // --- 2. SMOOTH SCROLL (LENIS) ---
+        let lenis;
+        if (typeof Lenis !== 'undefined') {
+            lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smooth: true
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+            
+            lenis.on('scroll', ScrollTrigger.update)
+            gsap.ticker.add((time)=>{
+              lenis.raf(time * 1000)
+            })
+            gsap.ticker.lagSmoothing(0)
+        } else {
+            console.warn("Lenis library not loaded. Smooth scrolling disabled.");
+            document.body.style.overflow = "auto"; 
+        }
+
+        // --- NEW: SMOOTH SCROLL TO SECTION (UPDATED FOR HISTORY) ---
+        function scrollToSection(id, pushToHistory = true) {
+            if(pushToHistory && history.pushState) {
+                history.pushState(null, null, `#${id}`);
+            }
+            if(lenis) {
+                lenis.scrollTo(`#${id}`, { duration: 1.5 });
+            } else {
+                gsap.to(window, { duration: 1, scrollTo: `#${id}` });
+            }
+        }
+
+        // --- 3. HEADER BLUR ON SCROLL ---
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // --- 4. INTRO SCROLL PINNING & TEXT HIGHLIGHT ---
+        const revealTypes = document.querySelectorAll('.reveal-type');
+        
+        revealTypes.forEach((text) => {
+            const content = text.textContent;
+            text.innerHTML = ''; 
+            const words = content.split(' ').filter(word => word.length > 0);
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.textContent = word + ' ';
+                span.style.opacity = '0.2'; 
+                text.appendChild(span);
+            });
+        });
+
+        const allSpans = document.querySelectorAll('.reveal-type span');
+        
+        gsap.to(allSpans, {
+            color: "#fffafb", // Snow text
+            opacity: 1,
+            stagger: 0.1,
+            scrollTrigger: {
+                trigger: "#intro",
+                pin: true,           
+                start: "top top",  // SNAP AT TOP
+                end: "+=150%",     
+                scrub: 1,          
+            }
+        });
+
+        // --- 5. CAREER PATH SCROLL LOGIC ---
+        const careerSection = document.querySelector('.career-section');
+        const careerWrapper = document.querySelector('.career-timeline-container');
+        const careerProgress = document.querySelector('.career-progress-bar');
+
+        if(careerSection && careerWrapper) {
+            const careerScrollDist = careerWrapper.scrollWidth - window.innerWidth + 200; 
+
+            gsap.to(careerWrapper, {
+                x: -careerScrollDist,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: careerSection,
+                    pin: true,
+                    start: "top top", // SNAP AT TOP
+                    scrub: 1,
+                    end: () => "+=" + (careerScrollDist * 3), // Slower speed
+                    onUpdate: self => {
+                        if(careerProgress) {
+                            gsap.to(careerProgress, { width: (self.progress * 100) + "%", duration: 0.1, ease: "none" });
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 6. NEW SKILLS VERTICAL LOGIC ---
+        // A. Text Reveal for Skills
+        const skillsDesc = document.querySelector('.reveal-type-skills');
+        if(skillsDesc) {
+            // Break text into spans for word-by-word reveal
+            const content = skillsDesc.textContent;
+            skillsDesc.innerHTML = ''; 
+            const words = content.split(' ').filter(word => word.length > 0);
+            words.forEach(word => {
+                const span = document.createElement('span');
+                span.textContent = word + ' ';
+                span.style.opacity = '0.2'; // Start dim
+                skillsDesc.appendChild(span);
+            });
+
+            const skillsSpans = skillsDesc.querySelectorAll('span');
+            gsap.to(skillsSpans, {
+                color: "#2b2c28", // Reveal to Graphite (Dark) for light background
+                opacity: 1,
+                stagger: 0.05,
+                scrollTrigger: {
+                    trigger: "#skills",
+                    start: "top 60%", 
+                    end: "top 30%",
+                    scrub: 1
+                }
+            });
+        }
+
+        // B. Pinning & Card Animation
+        const skillsTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#skills",
+                pin: true,           // Pins the section
+                pinSpacing: true,
+                start: "top top",
+                end: "+=200%",       // Scroll duration
+                scrub: 1,
+            }
+        });
+
+        // 1. Fade in and slide up cards
+        skillsTl.to('.skill-group', {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 1,
+            ease: "power2.out"
+        });
+
+        // 2. Sequential Glow Effect
+        const skillGroups = gsap.utils.toArray('.skill-group');
+        skillGroups.forEach((group) => {
+            skillsTl.to(group, {
+                borderColor: "#5f9986", // Teal Border
+                boxShadow: "0 0 30px rgba(95, 153, 134, 0.2)", // Soft Glow
+                backgroundColor: "#ffffff", // Keep white background
+                duration: 1,
+                ease: "power2.inOut"
+            }, ">-0.5"); // Overlap slightly
+        });
+
+
+        // --- 7. HORIZONTAL SCROLL LOGIC (SHOWCASE, ARCHIVE & GALLERY) ---
+        const horizontalSections = gsap.utils.toArray('.horizontal-section');
+
+        horizontalSections.forEach((section) => {
+            const wrapper = section.querySelector('.horizontal-wrapper');
+            const panels = gsap.utils.toArray('.panel', section);
+            const progressBar = section.querySelector('.section-progress-bar');
+            
+            // NEW SCROLL DISTANCE LOGIC
+            const scrollDistance = window.innerHeight * (panels.length - 1) * 2; 
+
+            if(wrapper) {
+                gsap.to(wrapper, {
+                    xPercent: -100 * (panels.length - 1) / panels.length,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: section,
+                        pin: true,
+                        start: "top top", // SNAP AT TOP
+                        scrub: 0.5, // REDUCED: Closer to real-time for better snap accuracy
+                        snap: {
+                            snapTo: 1 / (panels.length - 1),
+                            duration: { min: 0.2, max: 0.5 },
+                            delay: 0.1, // Wait for user to stop interaction
+                            ease: "power1.out",
+                            directional: false // Ensure it snaps to closest point, not just direction
+                        },
+                        end: () => "+=" + (scrollDistance),
+                        invalidateOnRefresh: true, // Recalculate on resize
+                        
+                        onUpdate: self => {
+                            if(progressBar) {
+                                gsap.to(progressBar, { width: (self.progress * 100) + "%", duration: 0.1, ease: "none" });
+                            }
+                        }
+                    }
+                });
+                
+                // TRIGGER TEXT FILL ANIMATION FOR BOTH SHOWCASE AND ARCHIVE
+                const fillOverlay = section.querySelector('.fill-text-overlay');
+                if (fillOverlay) {
+                     gsap.to(fillOverlay, {
+                            width: "100%",
+                            duration: 1.5,
+                            ease: "power2.out",
+                            scrollTrigger: {
+                               trigger: section,
+                               start: "top 60%", // Trigger when section top hits 60% of viewport height
+                               toggleActions: "play none none reverse"
+                            }
+                        });
+                }
+
+                // Only apply parallax to non-stack images (Showcase/Archive)
+                panels.forEach(panel => {
+                    const img = panel.querySelector('img:not(.stack-img)');
+                    if(img) {
+                        gsap.to(img, {
+                            xPercent: 15,
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: panel,
+                                containerAnimation: gsap.getTweensOf(wrapper)[0],
+                                scrub: true
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+        // --- 8. DYNAMIC HEADER SYNC & NAVIGATION UPDATE ---
+        const headerText = document.getElementById('dynamic-header');
+        const pageProgressBar = document.getElementById('page-progress');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        function updateHeader(title) {
+            if (headerText.innerText !== title) {
+                gsap.killTweensOf(headerText);
+                gsap.to(headerText, {
+                    y: -24,
+                    duration: 0.2,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        headerText.innerText = title;
+                        gsap.set(headerText, { y: 24 });
+                        gsap.to(headerText, {
+                            y: 0,
+                            duration: 0.3,
+                            ease: "power2.out"
+                        });
+                    }
+                });
+            }
+        }
+
+        function updateNav(sectionId) {
+            navItems.forEach(item => {
+                if(item.dataset.target === sectionId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function toggleSectionLabel(sectionId, show) {
+            const label = document.querySelector(`#${sectionId} .section-label`);
+            if(label) {
+                gsap.killTweensOf(label);
+                if(show) {
+                    gsap.to(label, { y: 0, opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" });
+                } else {
+                    gsap.to(label, { y: -20, opacity: 0, scale: 0.8, duration: 0.4, ease: "back.in(2)" });
+                }
+            }
+        }
+
+        // Helper to get horizontal distances dynamically
+        const getHorizontalDist = (selector, panels) => {
+            return window.innerHeight * (panels - 1) * 2; 
+        };
+
+        const sections = [
+            { 
+                id: 'hero', 
+                title: 'GRAPHIC DESIGNER', 
+                // Normal vertical scroll
+                end: "bottom top"  
+            },
+            { 
+                id: 'intro', 
+                title: 'INTRODUCTION', 
+                // Pinned for 150%
+                end: "+=150%"  
+            },
+            { 
+                id: 'experience', 
+                title: 'EXPERIENCE', 
+                // Horizontal (calculated dynamically below)
+                end: () => "+=" + ((document.querySelector('.career-timeline-container').scrollWidth - window.innerWidth + 200) * 3)
+            },
+            { 
+                id: 'skills', 
+                title: 'SKILLS', 
+                // Updated for Vertical Pin
+                end: "+=200%"
+            },
+            { 
+                id: 'showcase', 
+                title: 'SHOWCASE', 
+                // Horizontal (4 panels)
+                end: () => "+=" + getHorizontalDist('#showcase', 4)
+            },
+            { 
+                id: 'samples', 
+                title: 'GALLERY', 
+                // Horizontal (3 panels)
+                end: () => "+=" + getHorizontalDist('#samples', 3)
+            },
+            { 
+                id: 'contact', 
+                title: 'CONTACT',
+                end: "bottom bottom"
+            }
+        ];
+
+        ScrollTrigger.refresh();
+
+        sections.forEach((section, i) => {
+            // Main Section Trigger
+            ScrollTrigger.create({
+                trigger: `#${section.id}`,
+                start: "top top", 
+                end: section.end || "bottom top", // Use specific end if defined
+                onEnter: () => {
+                    updateHeader(section.title);
+                    updateNav(section.id);
+                    toggleSectionLabel(section.id, false); 
+                    // Update URL without adding to history stack (replace)
+                    if(history.replaceState) history.replaceState(null, null, `#${section.id}`);
+                },
+                onLeave: () => {
+                },
+                onEnterBack: () => {
+                    updateHeader(section.title);
+                    updateNav(section.id);
+                    toggleSectionLabel(section.id, false);
+                    if(history.replaceState) history.replaceState(null, null, `#${section.id}`);
+                },
+                onLeaveBack: () => {
+                    toggleSectionLabel(section.id, true);
+                    if (i > 0) {
+                        updateHeader(sections[i - 1].title);
+                        updateNav(sections[i - 1].id);
+                        if(history.replaceState) history.replaceState(null, null, `#${sections[i - 1].id}`);
+                    }
+                }
+            });
+
+            // CONNECTING LINE ANIMATION
+            if (i < sections.length - 1) {
+                const nextSectionId = sections[i + 1].id;
+                const lineId = `line-${section.id}-${nextSectionId}`;
+                const lineElement = document.getElementById(lineId);
+                
+                if (lineElement) {
+                    gsap.fromTo(lineElement, 
+                        { width: "0%" },
+                        { 
+                            width: "100%", 
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: `#${section.id}`,
+                                start: "top top",
+                                // IMPORTANT: End must match the section's actual scroll duration
+                                end: section.end || "bottom top", 
+                                scrub: true
+                            }
+                        }
+                    );
+                }
+            }
+        });
+
+        // --- 9. GLOBAL PROGRESS BAR ---
+        gsap.to(pageProgressBar, {
+            width: "100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: document.documentElement, 
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0
+            }
+        });
+
+        // --- 10. CUSTOM CURSOR & BG ---
+        const cursor = document.getElementById('cursor');
+        // Mouse vector (0 to 1 range)
+        const mouse = new THREE.Vector2();
+        
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
+            // Update mouse vector for Three.js animations
+            gsap.to(mouse, { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight, duration: 0.5, ease: "power2.out" });
+        });
+
+        // Add Touch support for WebGL Background
+        window.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                const touch = e.touches[0];
+                gsap.to(mouse, { 
+                    x: touch.clientX / window.innerWidth, 
+                    y: touch.clientY / window.innerHeight, 
+                    duration: 0.5, 
+                    ease: "power2.out" 
+                });
+            }
+        });
+        
+        const interactiveElements = document.querySelectorAll('a, button, .panel, .exp-row, .career-node, .color-swatch, .stack-img');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hovered');
+                gsap.to(cursor, { scale: 0.5, duration: 0.3 });
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hovered');
+                gsap.to(cursor, { scale: 1, duration: 0.3 });
+            });
+        });
+
+        // --- 11. THREE.JS BACKGROUND & FLOATING PAPER PLANE ---
+        
+        // 2. RENDERER FOR PLANE (Layer 2)
+        const rendererFeather = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        document.getElementById('feather-container').appendChild(rendererFeather.domElement);
+        rendererFeather.setSize(window.innerWidth, window.innerHeight);
+        rendererFeather.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // Important: Set background to null/transparent
+        rendererFeather.setClearColor(0x000000, 0); 
+
+        // --- SCENE 2: FLOATING 3D PAPER PLANE (Perspective) ---
+        const planeScene = new THREE.Scene();
+        const planeCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        planeCamera.position.z = 5;
+
+        // Lights - Optimized for the new geometry
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+        planeScene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        dirLight.position.set(5, 10, 7);
+        planeScene.add(dirLight);
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        backLight.position.set(-5, -5, -10);
+        planeScene.add(backLight);
+
+        // --- NEW GEOMETRY: Paper Airplane 03 (Themed) ---
+        const planeGroup = new THREE.Group();
+
+        // --- PROCEDURAL PAPER TEXTURE ---
+        function createPaperTexture() {
+            const size = 512;
+            const data = new Uint8Array(size * size * 4);
+            for (let i = 0; i < size * size * 4; i += 4) {
+                const noise = Math.random() * 40 + 215; // Range 215-255 for a light base
+                data[i] = noise;
+                data[i + 1] = noise;
+                data[i + 2] = noise;
+                data[i + 3] = 255;
+            }
+            const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(2, 2); // Repeat for a finer grain
+            texture.needsUpdate = true;
+            return texture;
+        }
+        const paperTexture = createPaperTexture();
+
+        function createThemedPlane() {
+            const geometry = new THREE.BufferGeometry();
+            
+            // Define Coordinates based on the "Paper Airplane 03" snippet
+            const nose = { x: 0, y: 0, z: 4 };
+            const tailTop = { x: 0, y: 0.8, z: -3.5 };
+            const tailBottom = { x: 0, y: -0.5, z: -3.5 };
+            const wingLeft = { x: 2.8, y: 0.8, z: -3.5 };
+            const wingRight = { x: -2.8, y: 0.8, z: -3.5 };
+            
+            // Central Spine Width
+            const spineWidth = 0.15;
+            const spineLeft = { x: spineWidth, y: 0.2, z: -3.5 };
+            const spineRight = { x: -spineWidth, y: 0.2, z: -3.5 };
+
+            const vertices = [];
+            const colors = [];
+            // Add UVs for texture mapping
+            const uvs = [];
+
+            // Theme Colors mapping
+            const colorMain = new THREE.Color(0x7de2d1); // Pearl Aqua (Main Wing)
+            const colorDark = new THREE.Color(0xf0f0e8); // Off-White (Underside)
+            const colorWhite = new THREE.Color(0xfffafb); // Snow (Spine)
+            const colorGrey = new THREE.Color(0x339989); // Verdigris (Detail)
+
+            // Helper for UV mapping (simple planar projection from top-down)
+            function getUV(v) {
+                return { u: (v.x / 6) + 0.5, v: (v.z / 8) + 0.5 };
+            }
+
+            // Helper
+            function addTriangle(v1, v2, v3, color) {
+                vertices.push(v1.x, v1.y, v1.z);
+                vertices.push(v2.x, v2.y, v2.z);
+                vertices.push(v3.x, v3.y, v3.z);
+                
+                colors.push(color.r, color.g, color.b);
+                colors.push(color.r, color.g, color.b);
+                colors.push(color.r, color.g, color.b);
+
+                const uv1 = getUV(v1);
+                const uv2 = getUV(v2);
+                const uv3 = getUV(v3);
+                uvs.push(uv1.u, uv1.v);
+                uvs.push(uv2.u, uv2.v);
+                uvs.push(uv3.u, uv3.v);
+            }
+
+            // 1. Top Left Wing (Main)
+            addTriangle(nose, spineLeft, wingLeft, colorMain);
+            
+            // 2. Top Right Wing (Main)
+            addTriangle(nose, wingRight, spineRight, colorMain);
+
+            // 3. Center Spine (White Highlight)
+            addTriangle(nose, tailTop, spineLeft, colorWhite);
+            addTriangle(nose, spineRight, tailTop, colorWhite);
+
+            // 4. Underside / Outer Flaps (Dark)
+            addTriangle(nose, wingLeft, tailBottom, colorDark); // Left
+            addTriangle(nose, tailBottom, wingRight, colorDark); // Right
+
+            // 5. Rear/Inside Detail
+            addTriangle(tailTop, tailBottom, spineLeft, colorGrey);
+            addTriangle(tailTop, spineRight, tailBottom, colorGrey);
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2)); // Add UV attribute
+            geometry.computeVertexNormals();
+
+            const material = new THREE.MeshStandardMaterial({
+                vertexColors: true,
+                map: paperTexture, // Apply the procedural texture
+                roughness: 0.9, // Matte paper feel - CHANGED
+                metalness: 0.0, // No metallic shine - CHANGED
+                side: THREE.DoubleSide,
+                flatShading: true 
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            // ROTATION FIX: Rotate 180 (PI) so Nose points -Z (Standard Forward)
+            mesh.rotation.y = Math.PI; 
+            return mesh;
+        }
+
+        const paperPlane = createThemedPlane();
+        planeGroup.add(paperPlane);
+
+        // Initial Position
+        planeGroup.position.set(-15, 10, 0); 
+        
+        // Scale settings
+        planeGroup.scale.set(0.25, 0.25, 0.25); 
+        
+        planeScene.add(planeGroup);
+        
+        // --- NEW PHYSICS VARIABLES (3D Steering) ---
+        // ---- CONFIG ----
+        const PLANE_CONFIG = {
+          bounds: {
+            xLimit: 9.0,
+            yLimit: 6.0,
+            zMin: -15.0,
+            zMax: 3.0
+          },
+          idle: {
+            maxSpeed: 0.18,
+            maxForce: 0.008
+          },
+          active: {
+            maxSpeed: 0.35,
+            maxForce: 0.03
+          },
+          scrollFlight: {
+            baseSpeed: 0.01,    // Restored to original speed
+            scrollFactor: 0.0075, // Halved scroll sensitivity (was 0.015)
+            ampX: 7.0,
+            ampY: 2.5,
+            ampZ: 1.0,
+            offsetZ: -2.0,
+            freqX: 0.8,
+            freqY: 1.5,
+            freqZ: 0.5
+          }
+        };
+
+        // ---- STATE CREATOR ----
+        function createPlaneState () {
+          return {
+            position: new THREE.Vector3(-15, 10, 0),
+            velocity: new THREE.Vector3(0, 0, 0),
+            acceleration: new THREE.Vector3(0, 0, 0),
+
+            isIntroAnimating: true,
+            scrollFlightProgress: 0
+          };
+        }
+        
+        // Initialize State
+        let planeState = createPlaneState();
+        
+        // Orientation variables
+        const currentQuaternion = new THREE.Quaternion();
+        
+        // Interaction State
+        let isMouseMoving = false;
+        let lastInputTime = Date.now();
+        let scrollVelocity = 0;
+        let lastScrollY = window.scrollY;
+        let mouseStopTimeout;
+
+        // Listeners
+        window.addEventListener('mousemove', () => {
+            isMouseMoving = true;
+            lastInputTime = Date.now();
+            clearTimeout(mouseStopTimeout);
+            mouseStopTimeout = setTimeout(() => { isMouseMoving = false; }, 100);
+        });
+        
+        // --- GSAP Intro Animation ---
+        const introProxy = { x: -15, y: 10, z: 0 };
+        gsap.to(introProxy, {
+            x: 0, y: 0, z: 0, duration: 4.0, ease: "power2.out",
+            onUpdate: () => {
+                // Update the state position directly
+                planeState.position.set(introProxy.x, introProxy.y, introProxy.z);
+                // Fake velocity for orientation during intro
+                planeState.velocity.set(1, -0.2, 0).normalize().multiplyScalar(0.2);
+            },
+            onComplete: () => { planeState.isIntroAnimating = false; }
+        });
+
+        // ---- PHYSICS HELPERS ----
+        function applyForce(state, force) {
+          state.acceleration.add(force);
+        }
+
+        function seek(state, target, maxSpeed, maxForce) {
+          const desired = new THREE.Vector3().subVectors(target, state.position);
+          const dist = desired.length();
+          desired.normalize();
+
+          if (dist < 3.0) {
+            desired.multiplyScalar(maxSpeed * (dist / 3.0));
+          } else {
+            desired.multiplyScalar(maxSpeed);
+          }
+
+          const steer = new THREE.Vector3().subVectors(desired, state.velocity);
+          steer.clampLength(0, maxForce);
+          return steer;
+        }
+
+        function flightPattern(state, time, maxSpeed, maxForce) {
+          const t = time * 0.4;
+          const target = new THREE.Vector3(
+            Math.sin(t) * 7.0,
+            Math.sin(t * 2.0) * 3.5,
+            Math.cos(t) * 6.0 - 4.0
+          );
+          return seek(state, target, maxSpeed, maxForce);
+        }
+
+        function boundaries(state, maxSpeed, maxForce, config) {
+          let desired = null;
+          const { xLimit, yLimit, zMin, zMax } = config.bounds;
+
+          if (state.position.x < -xLimit)
+            desired = new THREE.Vector3(maxSpeed, state.velocity.y, state.velocity.z);
+          else if (state.position.x > xLimit)
+            desired = new THREE.Vector3(-maxSpeed, state.velocity.y, state.velocity.z);
+
+          if (state.position.y < -yLimit)
+            desired = new THREE.Vector3(state.velocity.x, maxSpeed, state.velocity.z);
+          else if (state.position.y > yLimit)
+            desired = new THREE.Vector3(state.velocity.x, -maxSpeed, state.velocity.z);
+
+          if (state.position.z < zMin)
+            desired = new THREE.Vector3(state.velocity.x, state.velocity.y, maxSpeed);
+          else if (state.position.z > zMax)
+            desired = new THREE.Vector3(state.velocity.x, state.velocity.y, -maxSpeed);
+
+          if (desired) {
+            desired.normalize().multiplyScalar(maxSpeed);
+            const steer = new THREE.Vector3().subVectors(desired, state.velocity);
+            steer.clampLength(0, maxForce);
+            return steer;
+          }
+          return new THREE.Vector3(0, 0, 0);
+        }
+        
+        /**
+          * Updates plane physics for one frame.
+          */
+        function updatePlanePhysics(state, opts) {
+          const {
+            time,
+            scrollVelocity,
+            mouse,
+            isMouseMoving,
+            isIdle,
+            configOverride
+          } = opts;
+
+          const config = configOverride || PLANE_CONFIG;
+
+          if (state.isIntroAnimating) {
+            return;
+          }
+
+          let maxSpeed, maxForce;
+
+          if (isIdle) {
+            maxSpeed = config.idle.maxSpeed;
+            maxForce = config.idle.maxForce;
+
+            const patternForce = flightPattern(state, time, maxSpeed, maxForce);
+            applyForce(state, patternForce);
+
+            const boundaryForce = boundaries(state, maxSpeed, 0.02, config);
+            applyForce(state, boundaryForce);
+          } else {
+            maxSpeed = config.active.maxSpeed;
+            maxForce = config.active.maxForce;
+
+            let target = new THREE.Vector3();
+
+            if (isMouseMoving) {
+              // Follow mouse
+              target.set(
+                (mouse.x - 0.5) * 16,
+                -(mouse.y - 0.5) * 10,
+                0
+              );
+            } else {
+              // Scroll-driven long wavy path
+              const sCfg = config.scrollFlight;
+              const flySpeed =
+                sCfg.baseSpeed + Math.abs(scrollVelocity) * sCfg.scrollFactor;
+
+              state.scrollFlightProgress += flySpeed;
+
+              const t = state.scrollFlightProgress;
+
+              target.set(
+                Math.sin(t * sCfg.freqX) * sCfg.ampX,
+                Math.cos(t * sCfg.freqY) * sCfg.ampY,
+                Math.sin(t * sCfg.freqZ) * sCfg.ampZ + sCfg.offsetZ
+              );
+            }
+
+            const seekForce = seek(state, target, maxSpeed, maxForce);
+            applyForce(state, seekForce);
+
+            const safetyForce = boundaries(state, maxSpeed * 1.5, 0.05, config);
+            applyForce(state, safetyForce);
+          }
+
+          // Integrate physics
+          state.velocity.add(state.acceleration);
+          state.velocity.clampLength(0, maxSpeed);
+          state.position.add(state.velocity);
+          state.acceleration.multiplyScalar(0);
+        }
+
+        /**
+          * Computes a smoothed orientation quaternion from the current velocity.
+          */
+        function computePlaneRotation(state, prevQuat = new THREE.Quaternion()) {
+          if (state.velocity.lengthSq() <= 0.00001) {
+            return prevQuat;
+          }
+
+          const targetQuaternion = new THREE.Quaternion();
+          const lookMatrix = new THREE.Matrix4();
+          const up = new THREE.Vector3(0, 1, 0);
+          const eye = new THREE.Vector3(0, 0, 0);
+
+          lookMatrix.lookAt(eye, state.velocity, up);
+          targetQuaternion.setFromRotationMatrix(lookMatrix);
+
+          const bankAmount = -state.velocity.x * 0.5;
+          const maxBank = Math.PI / 3.0;
+          const clampedBank = Math.max(-maxBank, Math.min(maxBank, bankAmount));
+
+          const rollQuaternion = new THREE.Quaternion();
+          rollQuaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), clampedBank);
+
+          targetQuaternion.multiply(rollQuaternion);
+
+          const result = prevQuat.clone();
+          result.slerp(targetQuaternion, 0.05);
+          return result;
+        }
+
+        // --- AUTO COLOR PALETTE GENERATOR (Square & 3-4 Colors) ---
+        const PaletteGenerator = {
+            extract: function(imgElement, callback) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.crossOrigin = "Anonymous";  
+                img.src = imgElement.src;
+
+                img.onload = function() {
+                    canvas.width = 100;
+                    canvas.height = 100;
+                    context.drawImage(img, 0, 0, 100, 100);
+                    
+                    const data = context.getImageData(0, 0, 100, 100).data;
+                    const colorCounts = {};
+                    const threshold = 50; 
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i+1];
+                        const b = data[i+2];
+                        const a = data[i+3];
+
+                        if (a < 128) continue; 
+
+                        const rQ = Math.floor(r / 32) * 32;
+                        const gQ = Math.floor(g / 32) * 32;
+                        const bQ = Math.floor(b / 32) * 32;
+                        const key = `${rQ},${gQ},${bQ}`;
+
+                        if (!colorCounts[key]) {
+                            colorCounts[key] = { r: rQ, g: gQ, b: bQ, count: 0 };
+                        }
+                        colorCounts[key].count++;
+                    }
+
+                    const sortedColors = Object.values(colorCounts).sort((a, b) => b.count - a.count);
+                    const palette = [];
+                    
+                    for (const color of sortedColors) {
+                        if (palette.length >= 4) break; // MAX 4 COLORS
+                        
+                        let isDistinct = true;
+                        for (const p of palette) {
+                            const d = Math.sqrt(
+                                Math.pow(color.r - p.r, 2) + 
+                                Math.pow(color.g - p.g, 2) + 
+                                Math.pow(color.b - p.b, 2)
+                            );
+                            if (d < threshold) {
+                                isDistinct = false;
+                                break;
+                            }
+                        }
+                        
+                        if (isDistinct) {
+                            palette.push(color);
+                        }
+                    }
+                    
+                    // MIN 3 COLORS
+                    if (palette.length < 3) {
+                        for (const color of sortedColors) {
+                            if (palette.length >= 3) break;
+                            if (!palette.includes(color)) palette.push(color);
+                        }
+                    }
+
+                    callback(palette);
+                };
+            },
+
+            rgbToHex: function(r, g, b) {
+                return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            }
+        };
+
+        // --- STACK SLIDER LOGIC ---
+        class StackSlider {
+            constructor(containerId, paletteContainerId) {
+                this.container = document.getElementById(containerId);
+                this.wrapper = this.container.querySelector('.stack-wrapper');
+                this.images = Array.from(this.wrapper.querySelectorAll('.stack-img'));
+                this.nextBtn = this.container.querySelector('.next');
+                this.prevBtn = this.container.querySelector('.prev');
+                this.paletteContainerId = paletteContainerId;
+                
+                this.activeIndex = 0;
+                this.startX = 0;
+                this.isDragging = false;
+
+                this.init();
+            }
+
+            init() {
+                this.updateStack();
+                this.generatePalette(); // Initial palette
+
+                // Buttons
+                this.nextBtn.addEventListener('click', () => this.next());
+                this.prevBtn.addEventListener('click', () => this.prev());
+
+                // Drag Events
+                this.wrapper.addEventListener('mousedown', (e) => this.startDrag(e));
+                this.wrapper.addEventListener('touchstart', (e) => this.startDrag(e));
+                
+                window.addEventListener('mousemove', (e) => this.drag(e));
+                window.addEventListener('touchmove', (e) => this.drag(e));
+                
+                window.addEventListener('mouseup', () => this.endDrag());
+                window.addEventListener('touchend', () => this.endDrag());
+            }
+
+            updateStack() {
+                this.images.forEach((img, index) => {
+                    img.classList.remove('active', 'next');
+                    img.style.transform = '';
+                    img.style.opacity = '0';
+                    img.style.zIndex = '0';
+
+                    if (index === this.activeIndex) {
+                        img.classList.add('active');
+                        img.style.zIndex = '10';
+                        img.style.opacity = '1';
+                    } else if (index === (this.activeIndex + 1) % this.images.length) {
+                        img.classList.add('next');
+                        img.style.zIndex = '5';
+                        img.style.opacity = '1';
+                    }
+                });
+            }
+
+            generatePalette() {
+                const activeImg = this.images[this.activeIndex];
+                const container = document.getElementById(this.paletteContainerId);
+                
+                if (activeImg && container) {
+                    // Small delay to ensure image is loaded if just switched
+                    if(activeImg.complete) {
+                        this.runPaletteGen(activeImg, container);
+                    } else {
+                        activeImg.onload = () => this.runPaletteGen(activeImg, container);
+                    }
+                }
+            }
+
+            runPaletteGen(img, container) {
+                PaletteGenerator.extract(img, (palette) => {
+                    container.innerHTML = '';
+                    palette.forEach(color => {
+                        const hex = PaletteGenerator.rgbToHex(color.r, color.g, color.b);
+                        const swatch = document.createElement('div');
+                        swatch.className = 'color-swatch';
+                        swatch.style.backgroundColor = hex;
+                        swatch.setAttribute('title', hex);
+                        swatch.onclick = () => {
+                            // Using execCommand as clipboard.writeText may be restricted in some iframes
+                            const tempInput = document.createElement('textarea');
+                            tempInput.value = hex;
+                            document.body.appendChild(tempInput);
+                            tempInput.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(tempInput);
+
+                            swatch.setAttribute('title', 'Copied!');
+                            setTimeout(() => swatch.setAttribute('title', hex), 1000);
+                        };
+                        container.appendChild(swatch);
+                    });
+                });
+            }
+
+            next() {
+                // Animate out current to the RIGHT (Shuffle Away)
+                const current = this.images[this.activeIndex];
+                gsap.to(current, {
+                    x: 300, // Move even further right
+                    y: 50, // Slight arc downward
+                    rotation: 30, // More rotation
+                    scale: 0.8, // shrink
+                    opacity: 0, 
+                    duration: 0.4, 
+                    ease: "power2.in",
+                    onComplete: () => {
+                        this.activeIndex = (this.activeIndex + 1) % this.images.length;
+                        this.updateStack();
+                        this.generatePalette();
+                        // Reset pos of old current immediately
+                        gsap.set(current, { x: 0, y: 0, rotation: 0, scale: 1 });
+                    }
+                });
+            }
+
+            prev() {
+                this.activeIndex = (this.activeIndex - 1 + this.images.length) % this.images.length;
+                this.updateStack();
+                this.generatePalette();
+                
+                // Animate in new current from the LEFT (Shuffle In)
+                const current = this.images[this.activeIndex];
+                gsap.fromTo(current, 
+                    { x: -300, y: 50, rotation: -30, scale: 0.8, opacity: 0 }, 
+                    { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.5, ease: "elastic.out(1, 0.75)" }
+                );
+            }
+
+            startDrag(e) {
+                this.isDragging = true;
+                this.startX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            }
+
+            drag(e) {
+                if (!this.isDragging) return;
+                
+                const x = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+                const walk = x - this.startX;
+                
+                const current = this.images[this.activeIndex];
+                // Visual feedback of drag
+                current.style.transform = `translateX(${walk}px) rotate(${walk * 0.05}deg)`;
+            }
+
+            endDrag() {
+                if (!this.isDragging) return;
+                this.isDragging = false;
+                
+                const current = this.images[this.activeIndex];
+                const matrix = new WebKitCSSMatrix(window.getComputedStyle(current).transform);
+                const translateX = matrix.m41;
+
+                // Threshold for throw
+                if (Math.abs(translateX) > 50) { // Reduced threshold for easier throw
+                    if (translateX > 0) this.prev(); // Drag right -> Prev
+                    else this.next(); // Drag left -> Next
+                } else {
+                    // Snap back
+                    gsap.to(current, { x: 0, rotation: 0, duration: 0.3, ease: "power2.out" });
+                }
+            }
+        }
+
+        // Initialize Everything
+        window.addEventListener('load', () => {
+            new StackSlider('stack-1', 'palette-1');
+            new StackSlider('stack-2', 'palette-2');
+            new StackSlider('stack-3', 'palette-3');
+            
+            // --- LIGHTHOUSE PARALLAX INIT ---
+            const scene = document.getElementById('scene');
+            if(scene) {
+                const parallax = new Parallax(scene, {
+                    selector: '.layer'
+                });
+            }
+        });
+
+        // --- ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+
+        function animate() {
+            const time = clock.getElapsedTime();
+            
+            // Update Scroll Data
+            const currentScrollY = window.scrollY;
+            const rawVel = currentScrollY - lastScrollY;
+            scrollVelocity += (rawVel - scrollVelocity) * 0.1;
+            lastScrollY = currentScrollY;
+            
+            // Determine Idle State
+            const timeSinceInput = Date.now() - lastInputTime;
+            const isIdle = timeSinceInput > 2000;
+
+            // --- PHYSICS ENGINE UPDATE ---
+            updatePlanePhysics(planeState, {
+                time: time,
+                scrollVelocity: scrollVelocity,
+                mouse: mouse,
+                isMouseMoving: isMouseMoving,
+                isIdle: isIdle,
+                configOverride: PLANE_CONFIG // Explicitly pass our config
+            });
+
+            // UPDATE VISUALS
+            planeGroup.position.copy(planeState.position);
+            
+            // Compute Rotation
+            const newQuat = computePlaneRotation(planeState, planeGroup.quaternion);
+            planeGroup.quaternion.copy(newQuat);
+
+            // Render
+            rendererFeather.render(planeScene, planeCamera);
+            
+            requestAnimationFrame(animate);
+        }
+        // Start the animation loop right away
+        animate();
+
+        // Handle Resize
+        window.addEventListener('resize', () => { 
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            
+            rendererFeather.setSize(w, h);
+            
+            planeCamera.aspect = w / h;
+            planeCamera.updateProjectionMatrix();
+        });
+
+        // Just a cleanup trigger to ensure we refresh scroll triggers if needed
+        ScrollTrigger.refresh();
+
+        // --- 12. ROBUST NAVIGATION ADDITIONS ---
+        
+        // A. Handle Browser Back/Forward Buttons
+        window.addEventListener('popstate', () => {
+            if(location.hash) {
+                const id = location.hash.replace('#', '');
+                scrollToSection(id, false); // Don't push to history again
+            } else {
+                scrollToSection('hero', false);
+            }
+        });
+
+        // B. Keyboard Navigation (Arrow Keys)
+        window.addEventListener('keydown', (e) => {
+            if (!lenis) return;
+            const scrollStep = window.innerHeight * 0.4; // Scroll 40% of screen (Faster)
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                case 'ArrowLeft': // Map Left to Up for horizontal sections
+                    lenis.scrollTo(window.scrollY - scrollStep, { immediate: false });
+                    break;
+                case 'ArrowDown':
+                case 'ArrowRight': // Map Right to Down
+                    lenis.scrollTo(window.scrollY + scrollStep, { immediate: false });
+                    break;
+                case 'Home':
+                    lenis.scrollTo(0, { immediate: false });
+                    break;
+                case 'End':
+                    lenis.scrollTo(document.body.scrollHeight, { immediate: false });
+                    break;
+            }
+        });
+
+        // C. Drag / Grab to Scroll (Desktop)
+        let isDown = false;
+        let startY;
+        let scrollTop;
+
+        document.addEventListener('mousedown', (e) => {
+            // Prevent interference with interactive elements
+            if(e.target.closest('a, button, .slider-btn, .stack-img, input, textarea, .line-slider-track')) return;
+            // Also prevent if in work overlay
+            if(document.getElementById('work-overlay').classList.contains('pointer-events-auto')) return;
+            
+            isDown = true;
+            startY = e.pageY;
+            scrollTop = window.scrollY;
+            
+            // Visual Feedback
+            document.body.style.cursor = 'grabbing';
+            const cursor = document.getElementById('cursor');
+            if(cursor) cursor.classList.add('grabbing');
+        });
+
+        document.addEventListener('mouseleave', () => {
+            isDown = false;
+            document.body.style.cursor = '';
+            const cursor = document.getElementById('cursor');
+            if(cursor) cursor.classList.remove('grabbing');
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDown = false;
+            document.body.style.cursor = '';
+            const cursor = document.getElementById('cursor');
+            if(cursor) cursor.classList.remove('grabbing');
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const y = e.pageY;
+            const walk = (y - startY) * 1.5; // Scroll-fast multiplier
+            
+            if(lenis) {
+                lenis.scrollTo(scrollTop - walk, { immediate: true });
+            } else {
+                window.scrollTo(0, scrollTop - walk);
+            }
+        });
+
+        // --- 13. WORK SAMPLES OVERLAY LOGIC ---
+        const workBtn = document.getElementById('see-more-btn');
+        const workOverlay = document.getElementById('work-overlay');
+        // New references for split animation
+        const shutterTop = document.getElementById('shutter-top');
+        const shutterBottom = document.getElementById('shutter-bottom');
+        
+        const workOverlayContent = document.getElementById('work-overlay-content');
+        const closeBtns = document.querySelectorAll('.close-overlay-btn');
+
+        // Scoped variable to check if overlay is active for physics
+        let isWorkOverlayActive = false;
+
+        if(workBtn && workOverlay) {
+            
+            workBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(lenis) lenis.stop();
+                
+                // 1. Calculate Split Center based on button position
+                const rect = workBtn.getBoundingClientRect();
+                const splitCenter = rect.top + (rect.height / 2);
+                
+                // Account for the overlay's top offset (40px)
+                const overlayTopOffset = 40;
+                const relativeSplitCenter = splitCenter - overlayTopOffset;
+                
+                // 2. Set dynamic dimensions for shutters
+                shutterTop.style.height = `${relativeSplitCenter}px`;
+                shutterBottom.style.top = `${relativeSplitCenter}px`;
+                
+                // 3. Prepare Overlay State
+                workOverlay.classList.remove('hidden');
+                workOverlay.classList.remove('pointer-events-none');
+                workOverlay.classList.add('pointer-events-auto');
+                isWorkOverlayActive = true;
+                
+                const tlOpen = gsap.timeline();
+
+                // 4. Animate Shutters (Split Reveal)
+                tlOpen
+                    // Initialize state
+                    .set([shutterTop, shutterBottom], { scaleY: 0 }) 
+                    .set(closeBtns, { scale: 0.5, opacity: 0 }) 
+                    .set(workOverlayContent, { opacity: 0 }) 
+                    
+                    // Grow shutters from the center line
+                    .to([shutterTop, shutterBottom], { 
+                        scaleY: 1, 
+                        duration: 0.8, 
+                        ease: "power4.inOut" // Matches cubic-bezier(0.87, 0, 0.13, 1) roughly
+                    })
+
+                    // Reveal Content & Buttons
+                    .to([closeBtns, workOverlayContent], {
+                        opacity: 1,
+                        scale: 1, 
+                        duration: 0.3,
+                        ease: "power2.out"
+                    }, "-=0.2");
+            });
+
+            // Close Logic
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tlClose = gsap.timeline({
+                        onComplete: () => {
+                            // Reset State cleanly
+                            workOverlay.classList.add('hidden');
+                            workOverlay.classList.remove('pointer-events-auto');
+                            workOverlay.classList.add('pointer-events-none');
+                            isWorkOverlayActive = false;
+                            if(lenis) lenis.start();
+                        }
+                    });
+
+                    tlClose
+                        // Fade out text
+                        .to(workOverlayContent, { opacity: 0, duration: 0.3 })
+                        // Retract buttons
+                        .to(closeBtns, { scale: 0.5, opacity: 0, duration: 0.3 }, "<")
+                        // Shrink shutters back to center
+                        .to([shutterTop, shutterBottom], { 
+                            scaleY: 0, 
+                            duration: 0.8, 
+                            ease: "power4.inOut" 
+                        });
+                });
+            });
+        }
+
+        /* --- NEW: IMAGE TRACK PHYSICS LOGIC (Scoped) --- */
+        (function() {
+            // Reduced and streamlined image list
+            const imagesData = [
+                "https://images.unsplash.com/photo-1524781289445-ddf8f5695861?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1610194352361-4c81a6a8967e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1618202133208-2907bebba9e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1495805442109-bf1cf975750b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1548021682-1720ed403a5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1496753480864-3e588e0269b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1613346945084-35cccc812dd5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1516681100942-77d8e7f9dd97?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1592500595497-d1f52a48b28f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            ];
+            
+            const trackEl = document.getElementById("image-track");
+            let html = "";
+            imagesData.forEach(url => {
+                const highRes = url.replace("w=600", "w=1920").replace("q=80", "q=90");
+                html += `
+                <div class="image-wrapper">
+                    <div class="waviy">
+                        <span style="--i:1">L</span>
+                        <span style="--i:2">o</span>
+                        <span style="--i:3">a</span>
+                        <span style="--i:4">d</span>
+                        <span style="--i:5">i</span>
+                        <span style="--i:6">n</span>
+                        <span style="--i:7">g</span>
+                        <span style="--i:8">.</span>
+                    </div>
+                    <img class="work-image" loading="lazy" decoding="async" 
+                        src="${url}" 
+                        data-high-res="${highRes}" 
+                        draggable="false" />
+                </div>`;
+            });
+            trackEl.innerHTML = html;
+
+            const track = document.getElementById("image-track");
+            const lineSliderTrack = document.getElementById("lineSliderTrack");
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            const closeBtn = document.getElementById("lightbox-close-btn");
+
+            // The images are generated by script, so we query them now
+            const imagesCollection = document.getElementsByClassName("work-image");
+            const imagesArray = Array.from(imagesCollection);
+            const totalSlides = imagesArray.length;
+
+            let isDragging = false;
+            let startX = 0;
+            let targetPercentage = 0;
+            let currentPercentage = 0;
+            let dragStartPercentage = 0;
+            let currentImageIndex = 0;
+            
+            let touchStartY = 0; 
+            let touchStartX = 0;
+            
+            let isLocked = false;
+            let userHasScrubbed = false; 
+
+            // Cache window dimensions
+            let windowW = window.innerWidth;
+            let windowH = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                windowW = window.innerWidth;
+                windowH = window.innerHeight;
+            });
+
+            // OPTIMIZATION: Intersection Observer
+            const observerOptions = {
+                root: null,
+                rootMargin: '100px', 
+                threshold: 0
+            };
+
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    } else {
+                        entry.target.classList.remove('in-view');
+                        entry.target.style.objectPosition = '100% center';
+                    }
+                });
+            }, observerOptions);
+
+            imagesArray.forEach(img => imageObserver.observe(img));
+
+            /* -- TRUE FLIP ANIMATION -- */
+            const openLightboxAnimation = (index) => {
+                isLocked = true; 
+                const thumbnail = imagesArray[index];
+                
+                // Immediate UI updates
+                closeBtn.classList.add('active'); // Spin zoom in immediately
+                lightboxImg.src = thumbnail.src;
+                
+                const highResUrl = thumbnail.dataset.highRes;
+                if (highResUrl) {
+                    const highResLoader = new Image();
+                    highResLoader.onload = () => {
+                        if (lightbox.classList.contains('active') && lightboxImg.src === thumbnail.src) {
+                            lightboxImg.src = highResUrl;
+                        }
+                    };
+                    highResLoader.src = highResUrl;
+                }
+
+                lightboxImg.style.transition = 'none';
+                lightboxImg.style.opacity = '0';
+                
+                lightbox.style.opacity = '0';
+                lightbox.classList.add('active');
+                
+                requestAnimationFrame(() => {
+                    const startRect = thumbnail.getBoundingClientRect();
+                    
+                    // Temporarily set transform to identity to get endRect correctly
+                    lightboxImg.style.transform = 'translateY(-40px) scale(1)';
+                    lightboxImg.style.opacity = '1';
+                    const endRect = lightboxImg.getBoundingClientRect();
+                    
+                    const finalVisualCenterY = (windowH / 2) - 40;
+                    const finalVisualCenterX = windowW / 2;
+
+                    const startX = startRect.left + startRect.width / 2;
+                    const startY = startRect.top + startRect.height / 2;
+                    
+                    const trueDeltaX = startX - finalVisualCenterX;
+                    const trueDeltaY = startY - finalVisualCenterY;
+                    
+                    const scaleX = startRect.width / endRect.width;
+                    const scaleY = startRect.height / endRect.height;
+                    
+                    lightboxImg.style.transform = `translate(${trueDeltaX}px, ${trueDeltaY - 40}px) scale(${scaleX}, ${scaleY})`;
+                    lightboxImg.style.opacity = '1';
+                    
+                    void lightboxImg.offsetHeight;
+                    
+                    lightbox.style.opacity = ''; 
+                    
+                    lightboxImg.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)';
+                    lightboxImg.style.transform = 'translateY(-40px) scale(1)';
+                    
+                    setTimeout(() => {
+                        isLocked = false; 
+                    }, 500);
+                });
+            };
+
+            const closeLightboxAnimation = () => {
+                isLocked = true; 
+                currentPercentage = targetPercentage; 
+                
+                // Immediate UI updates
+                closeBtn.classList.remove('active'); // Spin zoom out immediately
+                
+                const thumbnail = imagesArray[currentImageIndex];
+                
+                // Need to calculate current light-box dimensions to correctly shrink it back
+                const currentRect = lightboxImg.getBoundingClientRect();
+
+                const endRect = thumbnail.getBoundingClientRect();     
+                
+                const endX = endRect.left + endRect.width / 2;
+                const endY = endRect.top + endRect.height / 2;
+                
+                const finalVisualCenterY = (windowH / 2) - 40;
+                const finalVisualCenterX = windowW / 2;
+                
+                const destX = endX - finalVisualCenterX;
+                const destY = endY - finalVisualCenterY;
+                
+                const finalScaleX = endRect.width / currentRect.width; 
+                const finalScaleY = endRect.height / currentRect.height;
+
+                lightboxImg.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s ease';
+                lightboxImg.style.transform = `translate(${destX}px, ${destY - 40}px) scale(${finalScaleX}, ${finalScaleY})`;
+                lightbox.style.opacity = '0'; 
+                
+                setTimeout(() => {
+                    lightbox.classList.remove('active');
+                    lightbox.style.opacity = ''; 
+                    lightboxImg.src = ""; 
+                    lightboxImg.style.transform = '';
+                    lightboxImg.style.transition = '';
+                    isLocked = false; 
+                    userHasScrubbed = false; 
+                }, 500);
+            };
+
+            const updateLightboxImage = () => {
+                const thumb = imagesArray[currentImageIndex];
+                lightboxImg.src = thumb.src;
+                lightboxImg.style.opacity = "1"; 
+                
+                const highResUrl = thumb.dataset.highRes;
+                if (highResUrl) {
+                    const img = new Image();
+                    img.onload = () => {
+                         if (currentImageIndex === imagesArray.indexOf(thumb)) {
+                             lightboxImg.src = highResUrl;
+                         }
+                    };
+                    img.src = highResUrl;
+                }
+            };
+
+            const goToIndex = (index) => {
+                const newPercentage = -100 * (index / (totalSlides - 1));
+                targetPercentage = newPercentage;
+            };
+
+            /* -- Setup Lines -- */
+            const fragment = document.createDocumentFragment();
+            imagesArray.forEach((_, i) => {
+                const wrapper = document.createElement("div");
+                wrapper.className = "line-wrapper";
+                const line = document.createElement("div");
+                line.className = "line";
+                wrapper.appendChild(line);
+                wrapper.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    if (didDragLine || isLocked) return;
+                    userHasScrubbed = true; 
+                    goToIndex(i);
+                });
+                fragment.appendChild(wrapper);
+            });
+            lineSliderTrack.appendChild(fragment);
+
+            const updateLines = (percentage) => {
+                const indexFloat = (Math.abs(percentage) / 100) * (totalSlides - 1);
+                const lines = document.getElementsByClassName("line"); 
+                
+                for(let i = 0; i < lines.length; i++) {
+                    const dist = Math.abs(i - indexFloat); 
+                    if (dist > 6) {
+                        lines[i].style.height = `12px`;
+                        lines[i].style.opacity = 0.25;
+                        continue;
+                    }
+                    const intensity = Math.exp(-1 * dist * dist * 0.4); 
+                    const h = 12 + (23 * intensity);
+                    const op = 0.25 + (0.75 * intensity);
+                    lines[i].style.height = `${h}px`;
+                    lines[i].style.opacity = op;
+                }
+            };
+
+            /* -- Physics Loop -- */
+            const animateOverlay = () => {
+                // Only run loop logic if overlay is active
+                if (!isWorkOverlayActive) {
+                    requestAnimationFrame(animateOverlay);
+                    return;
+                }
+
+                if (!isLocked) {
+                    const lerpFactor = 0.1; 
+                    const dist = targetPercentage - currentPercentage;
+                    
+                    if (Math.abs(dist) > 0.005) {
+                        currentPercentage += dist * lerpFactor;
+                        track.style.transform = `translate3d(${currentPercentage}%, -50%, 0)`;
+
+                        const visibleImages = document.getElementsByClassName("in-view");
+                        const trackScrollWidth = track.scrollWidth; 
+                        
+                        for(let i = 0; i < visibleImages.length; i++) {
+                            const image = visibleImages[i];
+                            // UPDATED: Use parent wrapper to get offset because image is now absolute
+                            const wrapper = image.parentElement;
+                            const imageCenter = wrapper.offsetLeft + (wrapper.offsetWidth / 2);
+                            
+                            const trackTranslation = (currentPercentage / 100) * trackScrollWidth;
+                            const centerOnScreen = (windowW / 2) + trackTranslation + imageCenter;
+                            const ratio = centerOnScreen / windowW;
+                            
+                            let clampedRatio = ratio;
+                            if(clampedRatio < 0) clampedRatio = 0;
+                            if(clampedRatio > 1) clampedRatio = 1;
+
+                            image.style.objectPosition = `${clampedRatio * 100}% center`;
+                        }
+
+                        updateLines(currentPercentage);
+                    } else {
+                        if (currentPercentage !== targetPercentage) {
+                             currentPercentage = targetPercentage;
+                             track.style.transform = `translate3d(${currentPercentage}%, -50%, 0)`;
+                             updateLines(currentPercentage);
+                        }
+                    }
+                }
+
+                if (lightbox.classList.contains('active') && !isLocked && userHasScrubbed) {
+                    const indexFloat = (Math.abs(currentPercentage) / 100) * (totalSlides - 1);
+                    const newIndex = Math.round(indexFloat);
+                    if (newIndex !== currentImageIndex) {
+                        currentImageIndex = newIndex;
+                        updateLightboxImage();
+                    }
+                }
+
+                requestAnimationFrame(animateOverlay);
+            };
+            
+            animateOverlay();
+
+            /* -- Inputs -- */
+            const handleOnDown = e => {
+                if (isLocked) return;
+                if (e.clientY < windowH * 0.1 || e.clientY > windowH * 0.8) return;
+                startX = e.clientX;
+                dragStartPercentage = targetPercentage; 
+                isDragging = true;
+            };
+
+            const handleOnUp = () => { isDragging = false; };
+
+            const handleOnMove = e => {
+                if(!isDragging || isLocked) return;
+                if (lightbox.classList.contains('active')) return;
+                
+                const mouseDelta = startX - e.clientX;
+                const maxDelta = windowW; 
+                const percentage = (mouseDelta / maxDelta) * -100;
+                const nextPercentage = dragStartPercentage + percentage;
+                targetPercentage = Math.max(Math.min(nextPercentage, 0), -100);
+            };
+
+            let isDraggingLine = false;
+            let lineStartX = 0;
+            let lineDragStartPct = 0;
+            let didDragLine = false; 
+
+            lineSliderTrack.addEventListener('mousedown', (e) => {
+                if (isLocked) return;
+                e.stopPropagation(); 
+                isDraggingLine = true;
+                didDragLine = false;
+                userHasScrubbed = true; 
+                lineStartX = e.pageX;
+                lineDragStartPct = targetPercentage;
+                lineSliderTrack.style.cursor = 'grabbing';
+            }, {passive: false});
+
+            lineSliderTrack.addEventListener('touchstart', (e) => {
+                if (isLocked) return;
+                e.stopPropagation();
+                isDraggingLine = true;
+                didDragLine = false;
+                userHasScrubbed = true; 
+                lineStartX = e.touches[0].pageX;
+                lineDragStartPct = targetPercentage;
+            }, {passive: false});
+
+            window.addEventListener('mousedown', e => { 
+                if(!isWorkOverlayActive) return;
+                if (!isDraggingLine) handleOnDown(e); 
+            });
+            
+            window.addEventListener('touchstart', e => { 
+                if(!isWorkOverlayActive) return;
+                if (lightbox.classList.contains('active')) {
+                    touchStartY = e.touches[0].clientY; 
+                    touchStartX = e.touches[0].clientX;
+                    return;
+                }
+                if (!isDraggingLine) handleOnDown(e.touches[0]); 
+            }, {passive: false});
+
+            window.addEventListener('mouseup', e => {
+                if(!isWorkOverlayActive) return;
+                handleOnUp();
+                if (isDraggingLine) {
+                    isDraggingLine = false;
+                    lineSliderTrack.style.cursor = 'grab';
+                }
+            });
+            
+            window.addEventListener('touchend', e => {
+                if(!isWorkOverlayActive) return;
+                if (lightbox.classList.contains('active') && !isLocked) {
+                    const touchEndX = e.changedTouches[0].clientX;
+                    const touchEndY = e.changedTouches[0].clientY;
+                    
+                    const diffX = touchEndX - touchStartX;
+                    const diffY = touchEndY - touchStartY;
+                    
+                    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+                        userHasScrubbed = true; 
+                        if (diffX < 0) {
+                            const nextIndex = (currentImageIndex + 1) % imagesArray.length;
+                            goToIndex(nextIndex);
+                        } else {
+                            const prevIndex = (currentImageIndex - 1 + imagesArray.length) % imagesArray.length;
+                            goToIndex(prevIndex);
+                        }
+                    }
+                }
+                handleOnUp();
+                isDraggingLine = false;
+            });
+
+            window.addEventListener('mousemove', e => {
+                if(!isWorkOverlayActive) return;
+                if (isDraggingLine) {
+                    if (isLocked) return;
+                    const diff = e.pageX - lineStartX;
+                    if(Math.abs(diff) > 2) didDragLine = true;
+                    const pctPerItem = 100 / (totalSlides - 1);
+                    const sensitivity = 12; 
+                    const itemsMoved = diff / sensitivity;
+                    const pctChange = itemsMoved * pctPerItem;
+                    let nextPct = lineDragStartPct - pctChange;
+                    targetPercentage = Math.max(Math.min(nextPct, 0), -100);
+                } else {
+                    handleOnMove(e);
+                }
+            });
+            
+            window.addEventListener('touchmove', e => {
+                if(!isWorkOverlayActive) return;
+                if (lightbox.classList.contains('active')) {
+                    const touchY = e.touches[0].clientY;
+                    const touchX = e.touches[0].clientX;
+                    const diffY = touchY - touchStartY;
+                    const diffX = touchX - touchStartX;
+                    
+                    if (Math.abs(diffY) > 50 && Math.abs(diffY) > Math.abs(diffX) && !isLocked) { 
+                        closeLightboxAnimation();
+                    }
+                    return;
+                }
+
+                if (isDraggingLine) {
+                    if (isLocked) return;
+                    e.preventDefault(); 
+                    const diff = e.touches[0].pageX - lineStartX;
+                    if(Math.abs(diff) > 2) didDragLine = true;
+                    const pctPerItem = 100 / (totalSlides - 1);
+                    const sensitivity = 12; 
+                    const itemsMoved = diff / sensitivity;
+                    const pctChange = itemsMoved * pctPerItem;
+                    let nextPct = lineDragStartPct - pctChange;
+                    targetPercentage = Math.max(Math.min(nextPct, 0), -100);
+                } else {
+                    handleOnMove(e.touches[0]);
+                }
+            }, {passive: false});
+
+            imagesArray.forEach((image, index) => {
+                image.onclick = (e) => {
+                    if(!isDragging && !isLocked) {
+                        currentImageIndex = index;
+                        requestAnimationFrame(() => openLightboxAnimation(index));
+                    }
+                }
+            });
+
+            // Close button functionality
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (!isLocked) closeLightboxAnimation();
+            };
+
+            lightbox.onclick = (e) => { 
+                if(e.target !== lightboxImg && !isLocked) closeLightboxAnimation(); 
+            }
+
+            lightboxImg.onclick = (e) => {
+                if (isLocked) return;
+                e.stopPropagation();
+                const width = lightboxImg.offsetWidth;
+                const clickX = e.offsetX;
+                
+                userHasScrubbed = true; 
+                
+                if (clickX > width / 2) {
+                    const nextIndex = (currentImageIndex + 1) % imagesArray.length;
+                    goToIndex(nextIndex); 
+                } else {
+                    const prevIndex = (currentImageIndex - 1 + imagesArray.length) % imagesArray.length;
+                    goToIndex(prevIndex);
+                }
+            };
+
+            window.addEventListener('keydown', (e) => {
+                if(!isWorkOverlayActive) return;
+                if (isLocked) return;
+                if (lightbox.classList.contains('active')) {
+                    userHasScrubbed = true; 
+                    if (e.key === "ArrowRight") {
+                        const nextIndex = (currentImageIndex + 1) % imagesArray.length;
+                        goToIndex(nextIndex);
+                    } else if (e.key === "ArrowLeft") {
+                        const prevIndex = (currentImageIndex - 1 + imagesArray.length) % imagesArray.length;
+                        goToIndex(prevIndex);
+                    } else if (e.key === "Escape") closeLightboxAnimation();
+                } else {
+                    const scrollSpeed = 5; 
+                    if (e.key === "ArrowLeft") targetPercentage = Math.min(targetPercentage + scrollSpeed, 0);
+                    else if (e.key === "ArrowRight") targetPercentage = Math.max(targetPercentage - scrollSpeed, -100);
+                }
+            });
+
+            window.addEventListener('wheel', e => {
+                if(!isWorkOverlayActive) return;
+                if (isLocked) return;
+                if(lightbox.classList.contains('active')) {
+                    if (Math.abs(e.deltaY) > 20) {
+                        closeLightboxAnimation();
+                    }
+                    return;
+                }
+                
+                const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+                const sensitivity = 0.05; 
+                const nextPct = targetPercentage - (delta * sensitivity);
+                targetPercentage = Math.max(Math.min(nextPct, 0), -100);
+            });
+        })();
+    </script>
+</body>
+</html>
